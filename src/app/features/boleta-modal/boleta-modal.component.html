@@ -1,0 +1,65 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Boleta de Pago - {{ documentoSignal() }}</h3>
+      <button class="close-btn" (click)="onClose()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      @if (isLoading()) {
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Cargando datos de la boleta...</p>
+        </div>
+      }
+      
+      @if (error()) {
+        <div class="error">
+          <p>{{ error() }}</p>
+          <button (click)="retry()">Reintentar</button>
+        </div>
+      }
+      
+      @if (boletaData() && !isLoading() && !error()) {
+        <div class="boleta-preview">
+          <div class="preview-header">
+            <h4>Vista previa de la boleta</h4>
+            <p><strong>Periodo:</strong> {{ mesSignal() }}/{{ anioSignal() }}</p>
+          </div>
+          
+          <div class="preview-details">
+            <div class="detail-row">
+              <span>Días trabajados:</span>
+              <span>{{ boletaData()?.ndiasTrab }}</span>
+            </div>
+            <div class="detail-row">
+              <span>Total ingresos:</span>
+              <span>S/ {{ boletaData()?.totalIngreso | number:'1.2-2' }}</span>
+            </div>
+            <div class="detail-row">
+              <span>Total descuentos:</span>
+              <span>S/ {{ boletaData()?.totalDescuento | number:'1.2-2' }}</span>
+            </div>
+            <div class="detail-row total">
+              <span>Neto a pagar:</span>
+              <span>S/ {{ boletaData()?.totalNetoBoleta | number:'1.2-2' }}</span>
+            </div>
+          </div>
+          
+          <div class="actions">
+            <button (click)="descargarBoleta()" class="btn-primary">
+              <span class="icon">📄</span>
+              Descargar/Imprimir
+            </button>
+          </div>
+        </div>
+      }
+      
+      @if (!boletaData() && !isLoading() && !error()) {
+        <div class="empty-state">
+          <p>No se encontraron datos de boleta para el documento {{ documentoSignal() }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

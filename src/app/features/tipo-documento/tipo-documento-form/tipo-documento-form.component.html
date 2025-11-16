@@ -1,0 +1,87 @@
+<div class="tipo-documento-form-container">
+  <div class="form-card">
+    <!-- Header -->
+    <div class="form-header">
+      <h2>{{ getPageTitle() }}</h2>
+      <button class="back-btn" (click)="onCancel()">
+        ← Volver al listado
+      </button>
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="tipoForm" (ngSubmit)="onSubmit()" class="form-body">
+      <div class="form-group">
+        <label for="nombre">Nombre del Tipo de Documento</label>
+        <input
+          type="text"
+          id="nombre"
+          formControlName="nombre"
+          class="form-control"
+          [class.error]="getFieldError('nombre')"
+          placeholder="Ingrese el nombre del tipo de documento"
+          [readonly]="isViewing"
+        />
+        <span class="error-message" *ngIf="getFieldError('nombre')">
+          {{ getFieldError('nombre') }}
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="activo">Estado</label>
+        <div class="checkbox-group">
+          <input
+            type="checkbox"
+            id="activo"
+            formControlName="activo"
+            [disabled]="isViewing"
+          />
+          <label for="activo" class="checkbox-label">Activo</label>
+        </div>
+      </div>
+
+      <!-- Información adicional para vista de detalles -->
+      <div *ngIf="isViewing && tipo" class="detail-info">
+        <div class="info-item">
+          <span class="info-label">ID:</span>
+          <span class="info-value">{{ tipo.idTipoDocumento }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Fecha de Creación:</span>
+          <span class="info-value">{{ tipo.fecCreacion | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="info-item" *ngIf="tipo.fecUltimaModificacion">
+          <span class="info-label">Última Modificación:</span>
+          <span class="info-value">{{ tipo.fecUltimaModificacion | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" (click)="onCancel()">
+          Cancelar
+        </button>
+
+        <!-- Botones específicos para vista de detalles -->
+        <div *ngIf="isViewing" class="detail-actions">
+          <button type="button" class="btn btn-warning" (click)="onEdit()">
+            ✏️ Editar
+          </button>
+          <button class="btn btn-sm" [ngClass]="isViewing ? 'btn-danger' : 'btn-success'" (click)="toggleEstado()"
+            [title]="isViewing ? 'Desactivar' : 'Activar'">
+            {{ isViewing? '🔒 Desactivar' : '🔓 Activar' }}
+          </button>
+        </div>
+
+        <!-- Botón de submit para crear/editar -->
+        <button 
+          *ngIf="!isViewing"
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="isSubmitting || tipoForm.invalid"
+        >
+          <span *ngIf="isSubmitting" class="spinner-small"></span>
+          {{ getSubmitButtonText() }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

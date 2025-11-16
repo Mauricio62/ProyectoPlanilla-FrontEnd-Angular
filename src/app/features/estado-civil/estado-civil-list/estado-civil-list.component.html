@@ -1,0 +1,132 @@
+<div class="estado-civil-container">
+  <!-- Header -->
+  <div class="header">
+    <h2>Gestión de Estados Civiles</h2>
+    <div class="header-buttons">
+      <button class="btn btn-primary" (click)="createEstadoCivil()">
+        <span>+</span> Nuevo Estado Civil
+      </button>
+      <button class="back-btn" (click)="onCancel()">
+        ← Volver al listado
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros y búsqueda -->
+  <div class="filters">
+    <div class="filter-group">
+      <label for="estado">Estado:</label>
+      <select id="estado" [(ngModel)]="selectedEstado" (change)="onEstadoChange()" class="form-select">
+        <option *ngFor="let option of estadoOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="search">Buscar:</label>
+      <input 
+        type="text" 
+        id="search" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearchChange()" 
+        placeholder="Buscar por nombre..."
+        class="form-input"
+      >
+    </div>
+
+    <div class="filter-group">
+      <label for="pageSize">Elementos por página:</label>
+      <select id="pageSize" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)" class="form-select">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Contenedor principal con async pipe -->
+  <div *ngIf="estadosCiviles$ | async as estadosResponse; else loadingTemplate" class="table-container">
+    
+    <table class="estado-civil-table" *ngIf="estadosResponse.content.length > 0">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Estado</th>
+          <th>Fecha Creación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let estadoCivil of estadosResponse.content; trackBy: trackByEstadoCivil" class="estado-civil-row">
+           <td class="estado-civil-name">{{ estadoCivil.nombre }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="getEstadoClass(estadoCivil.activo)">
+              {{ estadoCivil.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>{{ estadoCivil.fecCreacion | date:'dd/MM/yyyy' }}</td>
+          <td class="actions">
+            <button class="btn btn-sm btn-info" (click)="viewEstadoCivil(estadoCivil.idEstadoCivil!)" title="Ver detalles">
+              👁️
+            </button>
+            <button class="btn btn-sm btn-warning" (click)="editEstadoCivil(estadoCivil.idEstadoCivil!)" title="Editar">
+              ✏️
+            </button>
+            <button class="btn btn-sm" [ngClass]="estadoCivil.activo ? 'btn-danger' : 'btn-success'"
+              (click)="toggleEstado(estadoCivil)" [title]="estadoCivil.activo ? 'Desactivar' : 'Activar'">
+              {{ estadoCivil.activo ? '🔒' : '🔓' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="estadosResponse.content.length === 0" class="empty-state">
+      <h3>No hay estados civiles disponibles</h3>
+      <p>No se encontraron estados civiles con los filtros seleccionados.</p>
+      <button class="btn btn-primary" (click)="createEstadoCivil()">
+        Crear primer estado civil
+      </button>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination" *ngIf="estadosResponse.totalPages > 1">
+      <button class="btn btn-outline" [disabled]="currentPage === 0" (click)="onPageChange(0)">
+        ⮨
+      </button>
+
+      <button class="btn btn-outline" [disabled]="currentPage === 0" (click)="onPageChange(currentPage - 1)">
+        ⬅️
+      </button>
+
+      <button *ngFor="let page of getPaginationRange(estadosResponse.totalPages)" class="btn"
+        [ngClass]="page === currentPage ? 'btn-primary' : 'btn-outline'" (click)="onPageChange(page)">
+        {{ page + 1 }}
+      </button>
+
+      <button class="btn btn-outline" [disabled]="currentPage === estadosResponse.totalPages - 1" 
+        (click)="onPageChange(currentPage + 1)">
+        ➡️
+      </button>
+
+      <button class="btn btn-outline" [disabled]="currentPage === estadosResponse.totalPages - 1" 
+        (click)="onPageChange(estadosResponse.totalPages - 1)">
+        ⭢
+      </button>
+    </div>
+
+    <div class="pagination-info">
+      Mostrando {{ estadosResponse.content.length }} de {{ estadosResponse.totalElements }} elementos
+    </div>
+  </div>
+
+  <!-- Template de loading -->
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Cargando estados civiles...</p>
+    </div>
+  </ng-template>
+</div>

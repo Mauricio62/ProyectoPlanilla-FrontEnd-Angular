@@ -1,0 +1,252 @@
+.main-menu-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header del menú */
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 20px 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-avatar {
+  font-size: 2.5rem;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.user-details h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.user-details p {
+  margin: 5px 0 0 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+/* Título principal */
+.menu-title {
+  text-align: center;
+  margin-bottom: 40px;
+  color: white;
+}
+
+.menu-title h1 {
+  font-size: 3rem;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.menu-title p {
+  font-size: 1.2rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Grid del menú */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.menu-item {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+}
+
+.menu-item:hover:not(.disabled) {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.menu-item.disabled:hover {
+  transform: none;
+}
+
+/* Colores de las tarjetas */
+.card-primary {
+  border-color: #667eea;
+}
+
+.card-success {
+  border-color: #28a745;
+}
+
+.card-info {
+  border-color: #17a2b8;
+}
+
+.card-warning {
+  border-color: #ffc107;
+}
+
+.card-secondary {
+  border-color: #6c757d;
+}
+
+.card-dark {
+  border-color: #343a40;
+}
+
+/* Contenido de las tarjetas */
+.menu-item-icon {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.icon {
+  font-size: 3rem;
+  display: block;
+}
+
+.menu-item-content {
+  text-align: center;
+}
+
+.menu-item-title {
+  margin: 0 0 10px 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.menu-item-description {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.menu-item-arrow {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5rem;
+  color: #667eea;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.menu-item:hover .menu-item-arrow {
+  opacity: 1;
+  transform: translateX(5px);
+}
+
+.menu-item-disabled {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5rem;
+  color: #999;
+}
+
+/* Footer */
+.menu-footer {
+  text-align: center;
+  color: white;
+  opacity: 0.8;
+}
+
+.menu-footer p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-menu-container {
+    padding: 15px;
+  }
+  
+  .menu-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .menu-title h1 {
+    font-size: 2rem;
+  }
+  
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .menu-item {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-title h1 {
+    font-size: 1.8rem;
+  }
+  
+  .menu-title p {
+    font-size: 1rem;
+  }
+  
+  .user-details h2 {
+    font-size: 1.3rem;
+  }
+}

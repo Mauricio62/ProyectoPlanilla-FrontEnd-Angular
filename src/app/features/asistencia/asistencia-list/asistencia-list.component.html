@@ -1,0 +1,267 @@
+<div class="asistencia-container">
+  <!-- Header mejorado con botón volver -->
+  <div class="header">
+    <div>
+      <h1>📊 Control de Asistencias</h1>
+      <p>Gestiona las asistencias de los trabajadores</p>
+    </div>
+    <div class="header-buttons">
+      <button class="back-btn" (click)="onCancel()">
+        ← Volver al listado
+      </button>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="error-container">
+      <div class="error-icon">⚠️</div>
+      <h3>Error al cargar los datos</h3>
+      <p>No se pudieron cargar las asistencias. Por favor, intenta nuevamente.</p>
+      <button class="btn btn-primary" (click)="onRetry()">Reintentar</button>
+    </div>
+  } @else {
+    <!-- Filtros modernizados -->
+    <div class="filters-section">
+      <div class="filter-group">
+        <label for="año">Año:</label>
+        <input 
+          type="number" 
+          id="anio" 
+          [(ngModel)]="filtro.anio" 
+          min="2020" 
+          max="2030"
+          class="form-control"
+        >
+      </div>
+      
+      <div class="filter-group">
+        <label for="mes">Mes:</label>
+        <select id="mes" [(ngModel)]="filtro.mes" class="form-select">
+          <option value="1">Enero</option>
+          <option value="2">Febrero</option>
+          <option value="3">Marzo</option>
+          <option value="4">Abril</option>
+          <option value="5">Mayo</option>
+          <option value="6">Junio</option>
+          <option value="7">Julio</option>
+          <option value="8">Agosto</option>
+          <option value="9">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-success" (click)="buscarAsistencias()" [disabled]="loading()">
+          🔍 Buscar
+        </button>
+        <button class="btn btn-info" (click)="descargarExcel()" [disabled]="loading()">
+          📥 Descargar Excel
+        </button>
+        <button class="btn btn-warning" (click)="guardarCambios()">
+          💾 Guardar Cambios
+        </button>
+      </div>
+    </div>
+
+    <!-- Cargar archivo -->
+    <div class="upload-section">
+      <h3>📁 Cargar archivo Excel</h3>
+      <input 
+        type="file" 
+        accept=".xlsx,.xls" 
+        (change)="onFileSelected($event)"
+        class="file-input"
+        [disabled]="loading()"
+      >
+      <p class="help-text">Selecciona un archivo Excel para cargar asistencias</p>
+    </div>
+
+    <!-- Tabla de asistencias -->
+    <div class="table-section">
+      <h3>📋 Resumen de Asistencias</h3>
+      
+      @if (loading()) {
+        <div class="loading-container">
+          <div class="spinner"></div>
+          <p>Cargando asistencias...</p>
+        </div>
+      } @else {
+        @if (asistencias().length === 0) {
+          <div class="empty-state">
+            <h3>No hay asistencias disponibles</h3>
+            <p>No se encontraron asistencias para el periodo seleccionado.</p>
+            <button class="btn btn-success" (click)="buscarAsistencias()">
+              Buscar asistencias
+            </button>
+          </div>
+        } @else {
+          <div class="table-container">
+            <table class="asistencia-table editable-table">
+              <thead>
+                <tr>
+                  <th>DNI</th>
+                  <th>Nombre</th>
+                  <th>Días Laborales</th>
+                  <th>Días Descanso</th>
+                  <th>Días Inasistencia</th>
+                  <th>Días Feriados</th>
+                  <th>Horas Extra 25%</th>
+                  <th>Horas Extra 35%</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (asistencia of asistencias(); track asistencia.idTrabajador; let i = $index) {
+                  <tr [class.editing]="asistencia.editing">
+                    <!-- DNI (no editable) -->
+                    <td class="non-editable">
+                      {{ asistencia.documento }}
+                    </td>
+                    
+                    <!-- Nombre (no editable) -->
+                    <td class="non-editable">
+                      {{ asistencia.nombre }}
+                    </td>
+                    
+                    <!-- Días Laborales -->
+                    <td>
+                      @if (asistencia.editing) {
+                        <input 
+                          type="number" 
+                          [(ngModel)]="asistencia.diasLaborales" 
+                          min="0"
+                          max="31"
+                          class="edit-input"
+                          (keydown.enter)="guardarFila(i)"
+                        >
+                      } @else {
+                        <span (dblclick)="habilitarEdicion(i)">
+                          {{ asistencia.diasLaborales }}
+                        </span>
+                      }
+                    </td>
+                    
+                    <!-- Días Descanso -->
+                    <td>
+                      @if (asistencia.editing) {
+                        <input 
+                          type="number" 
+                          [(ngModel)]="asistencia.diasDescanso" 
+                          min="0"
+                          max="31"
+                          class="edit-input"
+                          (keydown.enter)="guardarFila(i)"
+                        >
+                      } @else {
+                        <span (dblclick)="habilitarEdicion(i)">
+                          {{ asistencia.diasDescanso }}
+                        </span>
+                      }
+                    </td>
+                    
+                    <!-- Días Inasistencia -->
+                    <td>
+                      @if (asistencia.editing) {
+                        <input 
+                          type="number" 
+                          [(ngModel)]="asistencia.diasInasistencia" 
+                          min="0"
+                          max="31"
+                          class="edit-input"
+                          (keydown.enter)="guardarFila(i)"
+                        >
+                      } @else {
+                        <span (dblclick)="habilitarEdicion(i)">
+                          {{ asistencia.diasInasistencia }}
+                        </span>
+                      }
+                    </td>
+                    
+                    <!-- Días Feriados -->
+                    <td>
+                      @if (asistencia.editing) {
+                        <input 
+                          type="number" 
+                          [(ngModel)]="asistencia.diasFeriados" 
+                          min="0"
+                          max="31"
+                          class="edit-input"
+                          (keydown.enter)="guardarFila(i)"
+                        >
+                      } @else {
+                        <span (dblclick)="habilitarEdicion(i)">
+                          {{ asistencia.diasFeriados }}
+                        </span>
+                      }
+                    </td>
+                    
+                    <!-- Horas Extra 25% -->
+                    <td>
+                      @if (asistencia.editing) {
+                        <input 
+                          type="number" 
+                          [(ngModel)]="asistencia.horasExtra25" 
+                          min="0"
+                          step="0.5"
+                          class="edit-input"
+                          (keydown.enter)="guardarFila(i)"
+                        >
+                      } @else {
+                        <span (dblclick)="habilitarEdicion(i)">
+                          {{ asistencia.horasExtra25 }}
+                        </span>
+                      }
+                    </td>
+                    
+                    <!-- Horas Extra 35% -->
+                    <td>
+                      @if (asistencia.editing) {
+                        <input 
+                          type="number" 
+                          [(ngModel)]="asistencia.horasExtra35" 
+                          min="0"
+                          step="0.5"
+                          class="edit-input"
+                          (keydown.enter)="guardarFila(i)"
+                        >
+                      } @else {
+                        <span (dblclick)="habilitarEdicion(i)">
+                          {{ asistencia.horasExtra35 }}
+                        </span>
+                      }
+                    </td>
+                    
+                    <!-- Acciones -->
+                    <td class="actions-cell">
+                      @if (asistencia.editing) {
+                        <button class="btn btn-sm btn-success btn-icon" (click)="guardarFila(i)" title="Guardar">
+                          ✅
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-icon" (click)="cancelarEdicion(i)" title="Cancelar">
+                          ❌
+                        </button>
+                      } @else {
+                        <button class="btn btn-sm btn-info btn-icon" (click)="habilitarEdicion(i)" title="Editar">
+                          ✏️
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Resumen de cambios -->
+          @if (hayCambios()) {
+            <div class="changes-summary">
+              <p>⚠️ Tienes cambios sin guardar. No olvides guardarlos antes de salir.</p>
+            </div>
+          }
+        }
+      }
+    </div>
+  }
+</div>

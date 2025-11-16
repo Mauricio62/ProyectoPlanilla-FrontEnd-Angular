@@ -1,0 +1,148 @@
+<div class="trabajador-container">
+  <!-- Header -->
+  <div class="header">
+    <h2>Gestión de Trabajadores</h2>
+    <div class="header-buttons">
+      <button class="btn btn-primary" (click)="createTrabajador()">
+        <span>+</span> Nuevo Trabajador
+      </button>
+      <button class="back-btn" (click)="onCancel()">
+        ← Volver al menú
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros y búsqueda -->
+  <div class="filters">
+    <div class="filter-group">
+      <label for="estado">Estado:</label>
+      <select id="estado" [(ngModel)]="selectedEstado" (change)="onEstadoChange()" class="form-select">
+        <option *ngFor="let option of estadoOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="search">Buscar:</label>
+      <input 
+        type="text" 
+        id="search" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearchChange()" 
+        placeholder="Buscar por nombre, documento..."
+        class="form-input"
+      >
+    </div>
+
+    <div class="filter-group">
+      <label for="pageSize">Elementos por página:</label>
+      <select id="pageSize" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)" class="form-select">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Contenedor principal con async pipe -->
+  <div *ngIf="trabajadores$ | async as trabajadoresResponse; else loadingTemplate" class="table-container">
+    
+    <table class="trabajador-table" *ngIf="trabajadoresResponse.content.length > 0">
+      <thead>
+        <tr>
+          <th>Documento</th>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Email</th>
+          <th>Estado</th>
+          <th>Fecha Ingreso</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let trabajador of trabajadoresResponse.content; trackBy: trackByTrabajador" class="trabajador-row">
+          <td class="trabajador-documento">{{ trabajador.documento }}</td>
+          <td class="trabajador-nombres">{{ trabajador.nombres }}</td>
+          <td class="trabajador-apellidos">{{ trabajador.apellidoPaterno }} {{ trabajador.apellidoMaterno }}</td>
+          <td class="trabajador-email">{{ trabajador.email }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="getEstadoClass(trabajador.activo!)">
+              {{ trabajador.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>{{ trabajador.fecIngreso | date:'dd/MM/yyyy' }}</td>
+          <td class="actions">
+            <button class="btn btn-sm btn-info" (click)="viewTrabajador(trabajador.idTrabajador!)" title="Ver detalles">
+              👁️
+            </button>
+            <button class="btn btn-sm btn-warning" (click)="editTrabajador(trabajador.idTrabajador!)" title="Editar">
+              ✏️
+            </button>
+            <button class="btn btn-sm" [ngClass]="trabajador.activo ? 'btn-danger' : 'btn-success'"
+              (click)="toggleEstado(trabajador)" [title]="trabajador.activo ? 'Desactivar' : 'Activar'">
+              {{ trabajador.activo ? '🔒' : '🔓' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="trabajadoresResponse.content.length === 0" class="empty-state">
+      <h3>No hay trabajadores disponibles</h3>
+      <p>No se encontraron trabajadores con los filtros seleccionados.</p>
+      <button class="btn btn-primary" (click)="createTrabajador()">
+        Crear primer trabajador
+      </button>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination" *ngIf="trabajadoresResponse.totalPages > 1">
+      <button 
+        class="btn btn-sm" 
+        [disabled]="trabajadoresResponse.first"
+        (click)="onPageChange(trabajadoresResponse.number - 1)"
+      >
+        ← Anterior
+      </button>
+      
+      <div class="page-numbers">
+        <button 
+          *ngFor="let page of getPaginationRange(trabajadoresResponse.totalPages)"
+          class="btn btn-sm" 
+          [class.btn-primary]="page === trabajadoresResponse.number"
+          [class.btn-outline]="page !== trabajadoresResponse.number"
+          (click)="onPageChange(page)"
+        >
+          {{ page + 1 }}
+        </button>
+      </div>
+      
+      <button 
+        class="btn btn-sm" 
+        [disabled]="trabajadoresResponse.last"
+        (click)="onPageChange(trabajadoresResponse.number + 1)"
+      >
+        Siguiente →
+      </button>
+    </div>
+
+    <!-- Información de paginación -->
+    <div class="pagination-info">
+      <span>
+        Mostrando {{ (trabajadoresResponse.number * trabajadoresResponse.size) + 1 }} - 
+        {{ getMinValue((trabajadoresResponse.number + 1) * trabajadoresResponse.size, trabajadoresResponse.totalElements) }} 
+        de {{ trabajadoresResponse.totalElements }} trabajadores
+      </span>
+    </div>
+  </div>
+
+  <!-- Template de carga -->
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Cargando trabajadores...</p>
+    </div>
+  </ng-template>
+</div>

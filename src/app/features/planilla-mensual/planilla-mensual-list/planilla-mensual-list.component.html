@@ -1,0 +1,119 @@
+<div class="container">
+  <!-- Header mejorado con botón volver -->
+  <div class="header">
+    <div>
+      <h2>💰 Gestión de Planilla Mensual</h2>
+      <p>Administra y calcula las planillas mensuales de los trabajadores</p>
+    </div>
+    <div class="header-buttons">
+      <button class="back-btn" (click)="onCancel()">
+        ← Volver al listado
+      </button>
+    </div>
+  </div>
+
+  <!-- Controles de filtro modernizados -->
+  <div class="filters">
+    <div class="filter-group">
+      <label for="anio">Año:</label>
+      <select id="anio" [ngModel]="anio()" (ngModelChange)="anio.set($event)" class="form-select">
+        @for (a of anios; track a) {
+          <option [value]="a">{{ a }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="mes">Mes:</label>
+      <select id="mes" [ngModel]="mes()" (ngModelChange)="mes.set($event)" class="form-select">
+        @for (m of meses; track m.valor) {
+          <option [value]="m.valor">{{ m.nombre }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-success" (click)="listarPlanillas()" [disabled]="isLoading()">
+        🔍 Buscar
+      </button>
+      <button class="btn btn-info" (click)="calcularPlanillas()" [disabled]="isLoading()">
+        🧮 Calcular
+      </button>
+      <button class="btn btn-warning" (click)="guardarPlanillas()" [disabled]="isLoading() || planillasCalculadas().length === 0">
+        💾 Guardar
+      </button>
+    </div>
+  </div>
+
+  <!-- Estados de carga y error -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Cargando planillas...</p>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="error">
+      <p>{{ error() }}</p>
+      <button class="btn btn-primary" (click)="retry()">Reintentar</button>
+    </div>
+  }
+
+  <!-- Tabla de planillas -->
+  @if (planillas().length > 0) {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Documento</th>
+            <th>Trabajador</th>
+            <th>Cargo</th>
+            <th>Días Trab.</th>
+            <th>Total Ingresos</th>
+            <th>Total Descuentos</th>
+            <th>Neto a Pagar</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (planilla of planillas(); track planilla.idPlanillaMensual || $index) {
+            <tr>
+              <td>{{ planilla.trabajador?.documento || 'N/A' }}</td>
+              <td>{{ (planilla.nombre || '') + ' ' + (planilla.apellido || '') }}</td>
+              <td>{{ planilla.cargo?.nombre || 'N/A' }}</td>
+              <td>{{ planilla.nDiasTrab || planilla.ndiasTrab || 'N/A' }}</td>
+              <td>S/ {{ (planilla.totalIngreso || 0) | number:'1.2-2' }}</td>
+              <td>S/ {{ (planilla.totalDescuento || 0) | number:'1.2-2' }}</td>
+              <td>S/ {{ (planilla.totalNetoBoleta || 0) | number:'1.2-2' }}</td>
+              <td>
+                <button class="btn btn-info" (click)="verBoleta(planilla)">
+                  📄 Descargar Boleta
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else if (!isLoading() && !error()) {
+    <div class="empty-state">
+      <h3>No hay planillas disponibles</h3>
+      <p>No se encontraron planillas para el periodo seleccionado.</p>
+      <button class="btn btn-success" (click)="listarPlanillas()">
+        Buscar planillas
+      </button>
+    </div>
+  }
+
+  <!-- Modal de boleta -->
+  @if (showBoletaModal()) {
+    <app-boleta-modal 
+      [anio]="anio()" 
+      [mes]="mes()" 
+      [documento]="selectedDocumento()"
+      [trabajador]="selectedTrabajador()"
+      (close)="onModalClose()">
+    </app-boleta-modal>
+  }
+</div>

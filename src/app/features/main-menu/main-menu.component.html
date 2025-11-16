@@ -1,0 +1,52 @@
+<div class="main-menu-container">
+  <!-- Header con información del usuario -->
+  <header class="menu-header">
+    <div class="user-info">
+      <div class="user-avatar">👤</div>
+      <div class="user-details">
+        <h2>Bienvenido, {{ currentUser?.username || 'Usuario' }}</h2>
+        <p>Sistema de Planillas - Menú Principal</p>
+      </div>
+    </div>
+    <button class="logout-btn" (click)="logout()">
+      🚪 Cerrar Sesión
+    </button>
+  </header>
+
+  <!-- Título principal -->
+  <div class="menu-title">
+    <h1>🎯 Panel de Control</h1>
+    <p>Selecciona la opción que deseas gestionar</p>
+  </div>
+
+  <!-- Grid de opciones del menú -->
+  <div class="menu-grid">
+    <div 
+      *ngFor="let item of menuItems" 
+      class="menu-item"
+      [ngClass]="getCardClass(item)"
+      (click)="onMenuItemClick(item)"
+      [class.disabled]="item.disabled"
+    >
+      <div class="menu-item-icon">
+        <span class="icon">{{ item.icon }}</span>
+      </div>
+      <div class="menu-item-content">
+        <h3 class="menu-item-title">{{ item.title }}</h3>
+        <p class="menu-item-description">{{ item.description }}</p>
+      </div>
+      <div class="menu-item-arrow" *ngIf="!item.disabled">
+        ➜
+      </div>
+      <div class="menu-item-disabled" *ngIf="item.disabled">
+        🔒
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer informativo -->
+  <footer class="menu-footer">
+    <p>💡 <strong>Tip:</strong> Las opciones marcadas con 🔒 estarán disponibles próximamente</p>
+    <p>🕒 Último acceso: {{ currentUser ? 'Hoy' : 'N/A' }}</p>
+  </footer>
+</div>

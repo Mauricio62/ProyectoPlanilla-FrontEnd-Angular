@@ -1,0 +1,157 @@
+<div class="sistema-pension-form-container">
+  <div class="form-card">
+    <!-- Header -->
+    <div class="form-header">
+      <h2>{{ getPageTitle() }}</h2>
+      <button class="back-btn" (click)="onCancel()">
+        ← Volver al listado
+      </button>
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="sistemaForm" (ngSubmit)="onSubmit()" class="form-body">
+      <div class="form-group">
+        <label for="nombre">Nombre del Sistema de Pensión</label>
+        <input
+          type="text"
+          id="nombre"
+          formControlName="nombre"
+          class="form-control"
+          [class.error]="getFieldError('nombre')"
+          placeholder="Ingrese el nombre del sistema de pensión"
+          [readonly]="isViewing"
+        />
+        <span class="error-message" *ngIf="getFieldError('nombre')">
+          {{ getFieldError('nombre') }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="aporte">Aporte (%)</label>
+        <input
+          type="number"
+          id="aporte"
+          formControlName="aporte"
+          class="form-control"
+          [class.error]="getFieldError('aporte')"
+          placeholder="Ingrese el porcentaje de aporte"
+          [readonly]="isViewing"
+          step="0.01"
+          min="0"
+          max="100"
+        />
+        <span class="error-message" *ngIf="getFieldError('aporte')">
+          {{ getFieldError('aporte') }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="comision">Comisión (%)</label>
+        <input
+          type="number"
+          id="comision"
+          formControlName="comision"
+          class="form-control"
+          [class.error]="getFieldError('comision')"
+          placeholder="Ingrese el porcentaje de comisión"
+          [readonly]="isViewing"
+          step="0.01"
+          min="0"
+          max="100"
+        />
+        <span class="error-message" *ngIf="getFieldError('comision')">
+          {{ getFieldError('comision') }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="prima">Prima de Seguro (%)</label>
+        <input
+          type="number"
+          id="prima"
+          formControlName="prima"
+          class="form-control"
+          [class.error]="getFieldError('prima')"
+          placeholder="Ingrese el porcentaje de prima de seguro"
+          [readonly]="isViewing"
+          step="0.01"
+          min="0"
+          max="100"
+        />
+        <span class="error-message" *ngIf="getFieldError('prima')">
+          {{ getFieldError('prima') }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="activo">Estado</label>
+        <div class="checkbox-group">
+          <input
+            type="checkbox"
+            id="activo"
+            formControlName="activo"
+            [disabled]="isViewing"
+          />
+          <label for="activo" class="checkbox-label">Activo</label>
+        </div>
+      </div>
+
+      <!-- Información adicional para vista de detalles -->
+      <div *ngIf="isViewing && sistema" class="detail-info">
+        <div class="info-item">
+          <span class="info-label">ID:</span>
+          <span class="info-value">{{ sistema.idSistemaPension }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Aporte:</span>
+          <span class="info-value">{{ sistema.aporte }}%</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Comisión:</span>
+          <span class="info-value">{{ sistema.comision }}%</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Prima de Seguro:</span>
+          <span class="info-value">{{ sistema.prima }}%</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Fecha de Creación:</span>
+          <span class="info-value">{{ sistema.fecCreacion | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="info-item" *ngIf="sistema.fecUltimaModificacion">
+          <span class="info-label">Última Modificación:</span>
+          <span class="info-value">{{ sistema.fecUltimaModificacion | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" (click)="onCancel()">
+          Cancelar
+        </button>
+
+        <!-- Botones específicos para vista de detalles -->
+        <div *ngIf="isViewing" class="detail-actions">
+          <button type="button" class="btn btn-warning" (click)="onEdit()">
+            ✏️ Editar
+          </button>
+          <button class="btn btn-sm" [ngClass]="isActivo? 'btn-danger' : 'btn-success'"
+              (click)="toggleEstado()" [title]="isActivo ? 'Desactivar' : 'Activar'">
+              {{ isActivo  ? '🔒 Desactivar' : '🔓 Activar' }}
+            </button>
+        </div>
+
+        <!-- Botón de submit para crear/editar -->
+        <button 
+          *ngIf="!isViewing"
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="isSubmitting || sistemaForm.invalid"
+        >
+          <span *ngIf="isSubmitting" class="spinner-small"></span>
+          {{ getSubmitButtonText() }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

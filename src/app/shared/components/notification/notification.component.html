@@ -1,0 +1,25 @@
+<div class="notifications-container">
+  <div 
+    *ngFor="let notification of notifications"
+    class="notification"
+    [ngClass]="'notification-' + notification.type"
+  >
+    <div class="notification-content">
+      <span class="notification-icon">
+        <ng-container [ngSwitch]="notification.type">
+          <span *ngSwitchCase="'success'">✅</span>
+          <span *ngSwitchCase="'error'">❌</span>
+          <span *ngSwitchCase="'warning'">⚠️</span>
+          <span *ngSwitchDefault>ℹ️</span>
+        </ng-container>
+      </span>
+      <span class="notification-message">{{ notification.message }}</span>
+    </div>
+    <button 
+      class="notification-close"
+      (click)="removeNotification(notification.id)"
+    >
+      ✕
+    </button>
+  </div>
+</div>

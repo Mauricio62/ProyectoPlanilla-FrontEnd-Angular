@@ -1,0 +1,133 @@
+<div class="situacion-trabajador-container">
+  <!-- Header -->
+  <div class="header">
+    <h2>Gestión de Situaciones de Trabajador</h2>
+    <div class="header-buttons">
+      <button class="btn btn-primary" (click)="createSituacionTrabajador()">
+        <span>+</span> Nueva Situación
+      </button>
+      <button class="back-btn" (click)="onCancel()">
+        ← Volver al listado
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros y búsqueda -->
+  <div class="filters">
+    <div class="filter-group">
+      <label for="estado">Estado:</label>
+      <select id="estado" [(ngModel)]="selectedEstado" (change)="onEstadoChange()" class="form-select">
+        <option *ngFor="let option of estadoOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="search">Buscar:</label>
+      <input 
+        type="text" 
+        id="search" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearchChange()" 
+        placeholder="Buscar por nombre..."
+        class="form-input"
+      >
+    </div>
+
+    <div class="filter-group">
+      <label for="pageSize">Elementos por página:</label>
+      <select id="pageSize" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)" class="form-select">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Contenedor principal con async pipe -->
+  <div *ngIf="situaciones$ | async as situacionesResponse; else loadingTemplate" class="table-container">
+    
+    <table class="situacion-table" *ngIf="situacionesResponse.content.length > 0">
+      <thead>
+        <tr>
+                  <th>Nombre</th>
+         
+          <th>Estado</th>
+          <th>Fecha Creación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let situacion of situacionesResponse.content; trackBy: trackBySituacion" class="situacion-row">
+          <td class="situacion-name">{{ situacion.nombre }}</td>
+                 <td>
+            <span class="status-badge" [ngClass]="getEstadoClass(situacion.activo)">
+              {{ situacion.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>{{ situacion.fecCreacion | date:'dd/MM/yyyy' }}</td>
+          <td class="actions">
+            <button class="btn btn-sm btn-info" (click)="viewSituacionTrabajador(situacion.idSituacion!)" title="Ver detalles">
+               👁️
+            </button>
+            <button class="btn btn-sm btn-warning" (click)="editSituacionTrabajador(situacion.idSituacion!)" title="Editar">
+              ✏️
+            </button>
+            <button class="btn btn-sm" [ngClass]="situacion.activo ? 'btn-danger' : 'btn-success'"
+              (click)="toggleEstado(situacion)" [title]="situacion.activo ? 'Desactivar' : 'Activar'">
+              {{ situacion.activo ? '🔒' : '🔓' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="situacionesResponse.content.length === 0" class="empty-state">
+      <h3>No hay situaciones de trabajador disponibles</h3>
+      <p>No se encontraron situaciones con los filtros seleccionados.</p>
+      <button class="btn btn-primary" (click)="createSituacionTrabajador()">
+        Crear primera situación
+      </button>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination" *ngIf="situacionesResponse.totalPages > 1">
+      <button class="btn btn-outline" [disabled]="currentPage === 0" (click)="onPageChange(0)">
+       ⮨
+      </button>
+
+      <button class="btn btn-outline" [disabled]="currentPage === 0" (click)="onPageChange(currentPage - 1)">
+           ⬅️
+      </button>
+
+      <button *ngFor="let page of getPaginationRange(situacionesResponse.totalPages)" class="btn"
+        [ngClass]="page === currentPage ? 'btn-primary' : 'btn-outline'" (click)="onPageChange(page)">
+        {{ page + 1 }}
+      </button>
+
+      <button class="btn btn-outline" [disabled]="currentPage === situacionesResponse.totalPages - 1" 
+        (click)="onPageChange(currentPage + 1)">
+     ➡️
+      </button>
+
+      <button class="btn btn-outline" [disabled]="currentPage === situacionesResponse.totalPages - 1" 
+        (click)="onPageChange(situacionesResponse.totalPages - 1)">
+       ➥
+      </button>
+    </div>
+
+    <div class="pagination-info">
+      Mostrando {{ situacionesResponse.content.length }} de {{ situacionesResponse.totalElements }} elementos
+    </div>
+  </div>
+
+  <!-- Template de loading -->
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Cargando situaciones de trabajador...</p>
+    </div>
+  </ng-template>
+</div>

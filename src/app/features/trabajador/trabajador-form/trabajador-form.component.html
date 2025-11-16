@@ -1,0 +1,325 @@
+@if (isLoading()) {
+  <div class="loading-container">
+    <div class="spinner">
+      <div class="spinner-circle"></div>
+    </div>
+    <p>Cargando formulario...</p>
+  </div>
+} @else if (hasError()) {
+  <div class="error-container">
+    <div class="error-icon">⚠️</div>
+    <h3>Error al cargar los datos</h3>
+    <p>No se pudieron cargar los datos necesarios para el formulario.</p>
+    <button class="btn btn-primary" (click)="onRetry()">Reintentar</button>
+    <button class="btn btn-secondary" (click)="onCancel()">Volver al listado</button>
+  </div>
+} @else {
+  <div class="trabajador-form-container">
+    <!-- Header -->
+    <div class="header">
+      <h2>
+        @if (!isEditing() && !isViewing()) {
+          <span>Nuevo Trabajador</span>
+        }
+        @if (isEditing()) {
+          <span>Editar Trabajador</span>
+        }
+        @if (isViewing()) {
+          <span>Ver Trabajador</span>
+        }
+      </h2>
+      <div class="header-buttons">
+        <button class="back-btn" (click)="onCancel()">
+          ← Volver al listado
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="trabajadorForm" (ngSubmit)="onSubmit()" class="trabajador-form">
+      
+      <!-- Información Personal -->
+      <div class="form-section">
+        <h3>Información Personal</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="idTipoDocumento">Tipo de Documento *</label>
+            <select 
+              id="idTipoDocumento" 
+              formControlName="idTipoDocumento"
+              [class.invalid]="isFieldInvalid('idTipoDocumento')"
+            >
+              <option value="">Seleccione tipo de documento</option>
+              @for (tipo of tiposDocumento(); track tipo.idTipoDocumento) {
+                <option [value]="tipo.idTipoDocumento">
+                  {{ tipo.nombre }}
+                </option>
+              }
+            </select>
+            <span class="error-message" *ngIf="getFieldError('idTipoDocumento')">
+              {{ getFieldError('idTipoDocumento') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="documento">Número de Documento *</label>
+            <input 
+              type="text" 
+              id="documento" 
+              formControlName="documento"
+              [class.invalid]="isFieldInvalid('documento')"
+              placeholder="Ingrese número de documento"
+            >
+            <span class="error-message" *ngIf="getFieldError('documento')">
+              {{ getFieldError('documento') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="nombres">Nombres *</label>
+            <input 
+              type="text" 
+              id="nombres" 
+              formControlName="nombres"
+              [class.invalid]="isFieldInvalid('nombres')"
+              placeholder="Ingrese nombres"
+            >
+            <span class="error-message" *ngIf="getFieldError('nombres')">
+              {{ getFieldError('nombres') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="apellidoPaterno">Apellido Paterno *</label>
+            <input 
+              type="text" 
+              id="apellidoPaterno" 
+              formControlName="apellidoPaterno"
+              [class.invalid]="isFieldInvalid('apellidoPaterno')"
+              placeholder="Ingrese apellido paterno"
+            >
+            <span class="error-message" *ngIf="getFieldError('apellidoPaterno')">
+              {{ getFieldError('apellidoPaterno') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="apellidoMaterno">Apellido Materno</label>
+            <input 
+              type="text" 
+              id="apellidoMaterno" 
+              formControlName="apellidoMaterno"
+              [class.invalid]="isFieldInvalid('apellidoMaterno')"
+              placeholder="Ingrese apellido materno"
+            >
+            <span class="error-message" *ngIf="getFieldError('apellidoMaterno')">
+              {{ getFieldError('apellidoMaterno') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="idGenero">Género *</label>
+            <select 
+              id="idGenero" 
+              formControlName="idGenero"
+              [class.invalid]="isFieldInvalid('idGenero')"
+            >
+              <option value="">Seleccione género</option>
+              @for (genero of generos(); track genero.idGenero) {
+                <option [value]="genero.idGenero">
+                  {{ genero.nombre }}
+                </option>
+              }
+            </select>
+            <span class="error-message" *ngIf="getFieldError('idGenero')">
+              {{ getFieldError('idGenero') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="idEstadoCivil">Estado Civil *</label>
+            <select 
+              id="idEstadoCivil" 
+              formControlName="idEstadoCivil"
+              [class.invalid]="isFieldInvalid('idEstadoCivil')"
+            >
+              <option value="">Seleccione estado civil</option>
+              @for (estado of estadosCiviles(); track estado.idEstadoCivil) {
+                <option [value]="estado.idEstadoCivil">
+                  {{ estado.nombre }}
+                </option>
+              }
+            </select>
+            <span class="error-message" *ngIf="getFieldError('idEstadoCivil')">
+              {{ getFieldError('idEstadoCivil') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="hijos">Número de Hijos</label>
+            <input 
+              type="number" 
+              id="hijos" 
+              formControlName="hijos"
+              [class.invalid]="isFieldInvalid('hijos')"
+              min="0"
+              placeholder="0"
+            >
+            <span class="error-message" *ngIf="getFieldError('hijos')">
+              {{ getFieldError('hijos') }}
+            </span>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="direccion">Dirección *</label>
+            <input 
+              type="text" 
+              id="direccion" 
+              formControlName="direccion"
+              [class.invalid]="isFieldInvalid('direccion')"
+              placeholder="Ingrese dirección completa"
+            >
+            <span class="error-message" *ngIf="getFieldError('direccion')">
+              {{ getFieldError('direccion') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email"
+              [class.invalid]="isFieldInvalid('email')"
+              placeholder="ejemplo@correo.com"
+            >
+            <span class="error-message" *ngIf="getFieldError('email')">
+              {{ getFieldError('email') }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información Laboral -->
+      <div class="form-section">
+        <h3>Información Laboral</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="idCargo">Cargo *</label>
+            <select 
+              id="idCargo" 
+              formControlName="idCargo"
+              [class.invalid]="isFieldInvalid('idCargo')"
+            >
+              <option value="">Seleccione cargo</option>
+              @for (cargo of cargos(); track cargo.idCargo) {
+                <option [value]="cargo.idCargo">
+                  {{ cargo.nombre }}
+                </option>
+              }
+            </select>
+            <span class="error-message" *ngIf="getFieldError('idCargo')">
+              {{ getFieldError('idCargo') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="idSituacion">Situación *</label>
+            <select 
+              id="idSituacion" 
+              formControlName="idSituacion"
+              [class.invalid]="isFieldInvalid('idSituacion')"
+            >
+              <option value="">Seleccione situación</option>
+              @for (situacion of situaciones(); track situacion.idSituacion) {
+                <option [value]="situacion.idSituacion">
+                  {{ situacion.nombre }}
+                </option>
+              }
+            </select>
+            <span class="error-message" *ngIf="getFieldError('idSituacion')">
+              {{ getFieldError('idSituacion') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="idSistemaPension">Sistema de Pensión *</label>
+            <select 
+              id="idSistemaPension" 
+              formControlName="idSistemaPension"
+              [class.invalid]="isFieldInvalid('idSistemaPension')"
+            >
+              <option value="">Seleccione sistema de pensión</option>
+              @for (sistema of sistemasPension(); track sistema.idSistemaPension) {
+                <option [value]="sistema.idSistemaPension">
+                  {{ sistema.nombre }}
+                </option>
+              }
+            </select>
+            <span class="error-message" *ngIf="getFieldError('idSistemaPension')">
+              {{ getFieldError('idSistemaPension') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="fecNacimiento">Fecha de Nacimiento *</label>
+            <input 
+              type="date" 
+              id="fecNacimiento" 
+              formControlName="fecNacimiento"
+              [class.invalid]="isFieldInvalid('fecNacimiento')"
+            >
+            <span class="error-message" *ngIf="getFieldError('fecNacimiento')">
+              {{ getFieldError('fecNacimiento') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="fecIngreso">Fecha de Ingreso *</label>
+            <input 
+              type="date" 
+              id="fecIngreso" 
+              formControlName="fecIngreso"
+              [class.invalid]="isFieldInvalid('fecIngreso')"
+            >
+            <span class="error-message" *ngIf="getFieldError('fecIngreso')">
+              {{ getFieldError('fecIngreso') }}
+            </span>
+          </div>
+
+          <div class="form-group" *ngIf="!isViewing()">
+            <label for="activo">Estado</label>
+            <div class="checkbox-group">
+              <input 
+                type="checkbox" 
+                id="activo" 
+                formControlName="activo"
+              >
+              <label for="activo" class="checkbox-label">Activo</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="form-actions" *ngIf="!isViewing()">
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="isSubmitting() || trabajadorForm.invalid"
+        >
+          @if (isSubmitting()) {
+            <span>Guardando...</span>
+          } @else {
+            <span>
+              {{ isEditing() ? 'Actualizar' : 'Crear' }} Trabajador
+            </span>
+          }
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+}

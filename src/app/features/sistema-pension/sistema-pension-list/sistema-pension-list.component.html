@@ -1,0 +1,132 @@
+<div class="sistema-pension-container">
+  <!-- Header -->
+  <div class="header">
+    <h2>Gestión de Sistemas de Pensión</h2>
+    <div class="header-buttons">
+      <button class="btn btn-primary" (click)="createSistemaPension()">
+        <span>+</span> Nuevo Sistema de Pensión
+      </button>
+      <button class="back-btn" (click)="onCancel()">
+        ← Volver al listado
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros y búsqueda -->
+  <div class="filters">
+    <div class="filter-group">
+      <label for="estado">Estado:</label>
+      <select id="estado" [(ngModel)]="selectedEstado" (change)="onEstadoChange()" class="form-select">
+        <option *ngFor="let option of estadoOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="search">Buscar:</label>
+      <input 
+        type="text" 
+        id="search" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearchChange()" 
+        placeholder="Buscar por nombre..."
+        class="form-input"
+      >
+    </div>
+
+    <div class="filter-group">
+      <label for="pageSize">Elementos por página:</label>
+      <select id="pageSize" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)" class="form-select">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Contenedor principal con async pipe -->
+  <div *ngIf="sistemasPension$ | async as sistemasResponse; else loadingTemplate" class="table-container">
+    
+    <table class="sistema-pension-table" *ngIf="sistemasResponse.content.length > 0">
+      <thead>
+        <tr>
+                    <th>Nombre</th>
+            <th>Estado</th>
+          <th>Fecha Creación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sistemaPension of sistemasResponse.content; trackBy: trackBySistemaPension" class="sistema-pension-row">
+               <td class="sistema-pension-name">{{ sistemaPension.nombre }}</td>
+                 <td>
+            <span class="status-badge" [ngClass]="getEstadoClass(sistemaPension.activo)">
+              {{ sistemaPension.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>{{ sistemaPension.fecCreacion | date:'dd/MM/yyyy' }}</td>
+          <td class="actions">
+            <button class="btn btn-sm btn-info" (click)="viewSistemaPension(sistemaPension.idSistemaPension!)" title="Ver detalles">
+              👁️
+            </button>
+            <button class="btn btn-sm btn-warning" (click)="editSistemaPension(sistemaPension.idSistemaPension!)" title="Editar">
+              ✏️
+            </button>
+            <button class="btn btn-sm" [ngClass]="sistemaPension.activo ? 'btn-danger' : 'btn-success'"
+              (click)="toggleEstado(sistemaPension)" [title]="sistemaPension.activo ? 'Desactivar' : 'Activar'">
+              {{ sistemaPension.activo ? '🔒' : '🔓' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="sistemasResponse.content.length === 0" class="empty-state">
+      <h3>No hay sistemas de pensión disponibles</h3>
+      <p>No se encontraron sistemas de pensión con los filtros seleccionados.</p>
+      <button class="btn btn-primary" (click)="createSistemaPension()">
+        Crear primer sistema de pensión
+      </button>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination" *ngIf="sistemasResponse.totalPages > 1">
+      <button class="btn btn-outline" [disabled]="currentPage === 0" (click)="onPageChange(0)">
+        ⮨
+      </button>
+
+      <button class="btn btn-outline" [disabled]="currentPage === 0" (click)="onPageChange(currentPage - 1)">
+        ⬅️
+      </button>
+
+      <button *ngFor="let page of getPaginationRange(sistemasResponse.totalPages)" class="btn"
+        [ngClass]="page === currentPage ? 'btn-primary' : 'btn-outline'" (click)="onPageChange(page)">
+        {{ page + 1 }}
+      </button>
+
+      <button class="btn btn-outline" [disabled]="currentPage === sistemasResponse.totalPages - 1" 
+        (click)="onPageChange(currentPage + 1)">
+        ➡️
+      </button>
+
+      <button class="btn btn-outline" [disabled]="currentPage === sistemasResponse.totalPages - 1" 
+        (click)="onPageChange(sistemasResponse.totalPages - 1)">
+        ⭢
+      </button>
+    </div>
+
+    <div class="pagination-info">
+      Mostrando {{ sistemasResponse.content.length }} de {{ sistemasResponse.totalElements }} elementos
+    </div>
+  </div>
+
+  <!-- Template de loading -->
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Cargando sistemas de pensión...</p>
+    </div>
+  </ng-template>
+</div>
