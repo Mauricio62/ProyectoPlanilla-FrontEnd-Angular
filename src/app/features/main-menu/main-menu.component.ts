@@ -3,16 +3,18 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/models';
+import { ChatComponent } from '../chat/chat.component';
 
 @Component({
   selector: 'app-main-menu',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ChatComponent],
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.css']
 })
 export class MainMenuComponent implements OnInit {
   currentUser: User | null = null;
+  isChatOpen: boolean = false;
   
   menuItems = [
     {
@@ -153,5 +155,13 @@ export class MainMenuComponent implements OnInit {
     const disabledClass = item.disabled ? 'card-disabled' : '';
     
     return `${baseClass} ${colorClass} ${disabledClass}`.trim();
+  }
+
+  toggleChat(): void {
+    this.isChatOpen = !this.isChatOpen;
+  }
+
+  closeChat(): void {
+    this.isChatOpen = false;
   }
 }

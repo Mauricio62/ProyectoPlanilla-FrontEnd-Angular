@@ -1,0 +1,60 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h3>
+      <span class="chat-icon">💬</span>
+      Asistente Virtual
+    </h3>
+    <button class="btn-clear" (click)="clearChat()" title="Limpiar chat">
+      🗑️
+    </button>
+  </div>
+
+  <div class="chat-messages" #messagesContainer>
+    <div *ngIf="isInitializing" class="loading-message">
+      <div class="spinner"></div>
+      <p>Inicializando asistente virtual...</p>
+    </div>
+
+    <div *ngFor="let message of messages" 
+         [class.user-message]="message.isUser" 
+         [class.bot-message]="!message.isUser"
+         class="message">
+      <div class="message-content">
+        <div class="message-text">{{ message.text }}</div>
+        <div class="message-time">
+          {{ message.timestamp | date:'HH:mm' }}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="message bot-message">
+      <div class="message-content">
+        <div class="typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input-container">
+    <input 
+      type="text" 
+      [(ngModel)]="currentMessage"
+      (keypress)="onKeyPress($event)"
+      [placeholder]="isWatsonConfigured ? 'Escribe tu pregunta aquí...' : 'Watson no configurado - Ver WATSON_ASSISTANT_SETUP.md'"
+      [disabled]="isLoading || isInitializing"
+      class="chat-input"
+    />
+    <button 
+      (click)="sendMessage()"
+      [disabled]="!currentMessage.trim() || isLoading || isInitializing"
+      class="send-button"
+      title="Enviar mensaje">
+      <span *ngIf="!isLoading">➤</span>
+      <span *ngIf="isLoading" class="spinner-small"></span>
+    </button>
+  </div>
+</div>
+

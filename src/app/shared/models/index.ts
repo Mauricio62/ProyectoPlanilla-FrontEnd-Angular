@@ -8,3 +8,4 @@ export * from './sistema-pension.models';
 export * from './tipo-documento.models';
 export * from './estado-civil.models';
 export * from './trabajador.models';
+export * from './chat.models';

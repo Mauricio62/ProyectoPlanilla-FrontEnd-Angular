@@ -71,6 +71,11 @@ export const API_CONFIG = {
       buscarBoleta: '/planilla-mensual/buscarBoleta',
       calcularPlanilla: '/planilla-mensual/calcularPlanilla',
       guardarPlanilla: '/planilla-mensual/guardarPlanilla'
+    },
+    chat: {
+      message: '/chat/message',
+      session: '/chat/session',
+      deleteSession: '/chat/session'
     }
 
   },

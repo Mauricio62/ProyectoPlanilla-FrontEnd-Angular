@@ -1,15 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { LoginRequest } from '../../../shared/models';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private notificationService: NotificationService
   ) {
- 
+
   }
 
   ngOnInit(): void {
@@ -45,16 +45,16 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
 
     if (this.loginForm.valid && !this.isLoading) {
-  
+
       this.isLoading = true;
       const credentials: LoginRequest = this.loginForm.value;
 
 
       this.authService.login(credentials).subscribe({
         next: (response) => {
-   
+
           this.notificationService.show('Login exitoso', 'success');
-   
+
           this.router.navigate(['/main-menu']);
         },
         error: (error) => {
@@ -67,18 +67,18 @@ export class LoginComponent implements OnInit {
         }
       });
     } else {
-   
+
       this.markFormGroupTouched();
     }
   }
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
- 
+
   }
 
   private markFormGroupTouched(): void {
-      Object.keys(this.loginForm.controls).forEach(key => {
+    Object.keys(this.loginForm.controls).forEach(key => {
       const control = this.loginForm.get(key);
       control?.markAsTouched();
     });

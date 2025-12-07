@@ -1,4 +1,46 @@
 <div class="dashboard-container">
-  <h1>{{ title }}</h1>
-  <p>Bienvenido al sistema de planillas</p>
+  <div class="dashboard-header">
+    <div class="welcome-section">
+      <h1>{{ title }}</h1>
+      <p class="welcome-subtitle">Bienvenido al sistema de planillas</p>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="dashboard-main">
+      <div class="quick-actions">
+        <h2>Accesos Rápidos</h2>
+        <div class="actions-grid">
+          <div class="action-card">
+            <div class="action-icon">📊</div>
+            <h3>Planillas Mensuales</h3>
+            <p>Gestiona y consulta las planillas mensuales de los trabajadores</p>
+            <span class="action-arrow">→</span>
+          </div>
+          <div class="action-card">
+            <div class="action-icon">👥</div>
+            <h3>Trabajadores</h3>
+            <p>Administra la información de los trabajadores</p>
+            <span class="action-arrow">→</span>
+          </div>
+          <div class="action-card">
+            <div class="action-icon">✅</div>
+            <h3>Asistencias</h3>
+            <p>Registra y consulta las asistencias de los trabajadores</p>
+            <span class="action-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-sidebar">
+      <div class="chat-section">
+        <h2>Asistente Virtual</h2>
+        <p class="chat-description">
+          Consulta información sobre planillas, beneficios y asistencias de forma rápida y sencilla.
+        </p>
+        <app-chat></app-chat>
+      </div>
+    </div>
+  </div>
 </div>

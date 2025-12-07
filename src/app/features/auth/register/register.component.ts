@@ -1,15 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { RegisterRequest, RoleDTO } from '../../../shared/models';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule,CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -25,7 +25,7 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -56,19 +56,19 @@ export class RegisterComponent implements OnInit {
   private passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
-    
+
     if (password?.value !== confirmPassword?.value) {
       confirmPassword?.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
     }
-    
+
     if (confirmPassword?.hasError('passwordMismatch')) {
       delete confirmPassword.errors!['passwordMismatch'];
       if (Object.keys(confirmPassword.errors!).length === 0) {
         confirmPassword.setErrors(null);
       }
     }
-    
+
     return null;
   }
 
@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.valid && !this.isLoading) {
       this.isLoading = true;
       const { confirmPassword, ...registerData } = this.registerForm.value;
-      
+
       this.authService.register(registerData as RegisterRequest).subscribe({
         next: (response) => {
           this.notificationService.show('Usuario registrado exitosamente', 'success');
