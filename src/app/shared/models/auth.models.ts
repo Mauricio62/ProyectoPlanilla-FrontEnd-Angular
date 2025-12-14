@@ -17,8 +17,15 @@ export interface RegisterRequest {
   role: string;
 }
 
+export interface RegisterResponse {
+  success: boolean;
+  message: string;
+  username: string | null;
+  role: string | null;
+}
+
 export interface RoleDTO {
-  name: string;
+  value: string;
   description: string;
 }
 

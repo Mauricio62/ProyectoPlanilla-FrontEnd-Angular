@@ -47,7 +47,7 @@
           [class.error]="getFieldError('role')"
         >
           <option value="">Selecciona un rol</option>
-          <option *ngFor="let role of availableRoles" [value]="role.name">
+          <option *ngFor="let role of availableRoles" [value]="role.value">
             {{ role.description }}
           </option>
         </select>

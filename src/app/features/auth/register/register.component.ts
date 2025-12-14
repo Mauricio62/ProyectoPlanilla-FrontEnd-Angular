@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
-import { RegisterRequest, RoleDTO } from '../../../shared/models';
+import { RegisterRequest, RegisterResponse, RoleDTO } from '../../../shared/models';
 
 @Component({
   selector: 'app-register',
@@ -45,10 +45,12 @@ export class RegisterComponent implements OnInit {
   private loadRoles(): void {
     this.authService.getRoles().subscribe({
       next: (roles) => {
+        console.log('Roles cargados:', roles);
         this.availableRoles = roles;
       },
       error: (error) => {
         console.error('Error loading roles:', error);
+        this.notificationService.show('Error al cargar los roles disponibles', 'error');
       }
     });
   }
@@ -75,16 +77,38 @@ export class RegisterComponent implements OnInit {
   onSubmit(): void {
     if (this.registerForm.valid && !this.isLoading) {
       this.isLoading = true;
-      const { confirmPassword, ...registerData } = this.registerForm.value;
 
+      const { confirmPassword, ...registerData } = this.registerForm.value;
+console.log(registerData)
       this.authService.register(registerData as RegisterRequest).subscribe({
-        next: (response) => {
-          this.notificationService.show('Usuario registrado exitosamente', 'success');
-          this.router.navigate(['/auth/login']);
+        next: (response: RegisterResponse) => {
+          if (response.success) {
+            this.notificationService.show(response.message || 'Usuario registrado exitosamente', 'success');
+            this.router.navigate(['/auth/login']);
+          } else {
+            this.notificationService.show(response.message || 'Error al registrar usuario', 'error');
+            this.isLoading = false;
+          }
         },
         error: (error) => {
           this.isLoading = false;
           console.error('Registration error:', error);
+          
+          // Mostrar mensaje de error específico
+          let errorMessage = 'Error al registrar usuario';
+          if (error.error) {
+            if (typeof error.error === 'string') {
+              errorMessage = error.error;
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            }
+          } else if (error.status === 403) {
+            errorMessage = 'No tiene permisos para registrar usuarios. Por favor, contacte al administrador.';
+          } else if (error.status === 400) {
+            errorMessage = error.error || 'Datos inválidos. Por favor, verifique la información ingresada.';
+          }
+          
+          this.notificationService.show(errorMessage, 'error');
         },
         complete: () => {
           this.isLoading = false;

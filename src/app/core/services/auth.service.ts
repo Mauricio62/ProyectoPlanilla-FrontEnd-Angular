@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
-import { LoginRequest, LoginResponse, RegisterRequest, User, RoleDTO } from '../../shared/models';
+import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse, User, RoleDTO } from '../../shared/models';
 import { StorageService } from './storage.service';
 import { API_CONFIG } from '../config/api.config';
 import { CONSTANTS } from '../config/constants';
@@ -60,9 +60,9 @@ export class AuthService {
       );
   }
 
-  register(userData: RegisterRequest): Observable<string> {
-  
-    return this.http.post<string>(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.auth.register}`, userData);
+  register(userData: RegisterRequest): Observable<RegisterResponse> {
+    console.log(userData);
+    return this.http.post<RegisterResponse>(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.auth.register}`, userData);
   }
 
   getRoles(): Observable<RoleDTO[]> {
