@@ -23,7 +23,8 @@ export class MainMenuComponent implements OnInit {
       description: 'Panel principal con estadísticas y resumen',
       icon: '📊',
       route: '/dashboard',
-      color: 'primary'
+      color: 'primary',
+       disabled: true
     },
     {
       id: 'cargo',
@@ -96,6 +97,7 @@ export class MainMenuComponent implements OnInit {
       icon: '💰',
       route: '/planilla-mensual',
       color: 'warning',
+       disabled: true
     },
     {
       id: 'reportes',
