@@ -1,0 +1,22 @@
+﻿{
+    "entries":  [
+                    {
+                        "value":  "Juan Perez",
+                        "synonyms":  [
+                                         "Juan",
+                                         "J. Perez"
+                                     ]
+                    },
+                    {
+                        "value":  "María Gómez",
+                        "synonyms":  [
+                                         "María",
+                                         "M. Gómez"
+                                     ]
+                    }
+                ],
+    "automatedExpansion":  false,
+    "name":  "trabajador",
+    "isOverridable":  true,
+    "isEnum":  false
+}

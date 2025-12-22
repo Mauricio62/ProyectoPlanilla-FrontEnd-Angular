@@ -1,0 +1,45 @@
+﻿{
+    "name":  "ChangeBankAccount",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Cambiar cuenta bancaria"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+                                             {
+                                                 "name":  "banco",
+                                                 "dataType":  "@sys.any",
+                                                 "value":  "$.banco",
+                                                 "isList":  false
+                                             },
+                                             {
+                                                 "name":  "numeroCuenta",
+                                                 "dataType":  "@sys.any",
+                                                 "value":  "$.numeroCuenta",
+                                                 "isList":  false
+                                             }
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Actualizando cuenta bancaria..."
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

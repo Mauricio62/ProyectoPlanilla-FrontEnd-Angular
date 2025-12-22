@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -13,19 +13,20 @@ import { ChatComponent } from '../chat/chat.component';
   styleUrls: ['./main-menu.component.css']
 })
 export class MainMenuComponent implements OnInit {
+  @ViewChild(ChatComponent) chatComponent!: ChatComponent;
   currentUser: User | null = null;
   isChatOpen: boolean = false;
   
   menuItems = [
+ /*
     {
       id: 'dashboard',
       title: 'Dashboard',
       description: 'Panel principal con estadísticas y resumen',
       icon: '📊',
       route: '/dashboard',
-      color: 'primary',
-       disabled: true
-    },
+      color: 'primary'
+    },*/
     {
       id: 'cargo',
       title: 'Gestión de Cargos',
@@ -97,9 +98,10 @@ export class MainMenuComponent implements OnInit {
       icon: '💰',
       route: '/planilla-mensual',
       color: 'warning',
-       disabled: true
-    },
-    {
+      disabled: false
+    }
+    /*  ,
+  {
       id: 'reportes',
       title: 'Reportes',
       description: 'Generar reportes y estadísticas',
@@ -116,7 +118,7 @@ export class MainMenuComponent implements OnInit {
       route: '/configuracion',
       color: 'dark',
       disabled: true
-    }
+    }*/
   ];
 
   constructor(
@@ -165,5 +167,11 @@ export class MainMenuComponent implements OnInit {
 
   closeChat(): void {
     this.isChatOpen = false;
+  }
+
+  clearChat(): void {
+    if (this.chatComponent) {
+      this.chatComponent.clearChat();
+    }
   }
 }

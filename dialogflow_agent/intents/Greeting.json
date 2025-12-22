@@ -1,0 +1,56 @@
+﻿{
+    "name":  "Greeting",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "events":  [
+
+               ],
+    "priority":  500000,
+    "webhookState":  "WEBHOOK_STATE_DISABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Hola"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     },
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Hola asistente"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     },
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Buenos dÃ­as"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Â¡Hola! Soy el asistente de planillas. Â¿En quÃ© puedo ayudarte?"
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

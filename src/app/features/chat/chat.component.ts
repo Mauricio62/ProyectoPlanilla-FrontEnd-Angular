@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
 import { ChatService } from '../../core/services/chat.service';
-import { ChatMessage } from '../../shared/models/chat.models';
 import { NotificationService } from '../../core/services/notification.service';
+import { ChatMessage } from '../../shared/models/chat.models';
 
 @Component({
   selector: 'app-chat',
@@ -14,18 +15,21 @@ import { NotificationService } from '../../core/services/notification.service';
 })
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
-  
+
   messages: ChatMessage[] = [];
   currentMessage: string = '';
   sessionId: string | null = null;
   isLoading: boolean = false;
   isInitializing: boolean = true;
-  isWatsonConfigured: boolean = true;
+  isAssistantConfigured: boolean = true;
 
   constructor(
     private chatService: ChatService,
     private notificationService: NotificationService
-  ) {}
+    ,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
+  ) { }
 
   ngOnInit(): void {
     this.initializeSession();
@@ -34,7 +38,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   ngOnDestroy(): void {
     if (this.sessionId) {
       this.chatService.deleteSession(this.sessionId).subscribe({
-        error: (err) => console.error('Error al eliminar sesión:', err)
+        error: (err: any) => console.error('Error al eliminar sesión:', err)
       });
     }
   }
@@ -45,25 +49,44 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private initializeSession(): void {
     this.isInitializing = true;
-    this.chatService.createSession().subscribe({
-      next: (response) => {
-        if (response.success && response.sessionId) {
-          this.sessionId = response.sessionId;
-          this.isWatsonConfigured = true;
-          this.addWelcomeMessage();
-        } else {
-          this.isWatsonConfigured = false;
+
+    // Safety timeout in case backend is down
+    const timeoutId = setTimeout(() => {
+      if (this.isInitializing) {
+        console.warn('Chat initialization timed out');
+        this.isInitializing = false;
+        this.isAssistantConfigured = false;
+        this.addConfigurationMessage();
+      }
+    }, 5000);
+
+    this.chatService.createSession()
+      .pipe(finalize(() => {
+        clearTimeout(timeoutId);
+        this.ngZone.run(() => {
+          this.isInitializing = false;
+          console.log('createSession finalize: isInitializing set to', this.isInitializing);
+          this.cdr.detectChanges();
+        });
+      }))
+      .subscribe({
+        next: (response) => {
+          console.log('createSession response:', response);
+          if (response.success && response.sessionId) {
+            this.sessionId = response.sessionId;
+            this.isAssistantConfigured = true;
+            this.addWelcomeMessage();
+          } else {
+            this.isAssistantConfigured = false;
+            this.addConfigurationMessage();
+          }
+        },
+        error: (error: any) => {
+          console.error('Error al crear sesión:', error);
+          this.isAssistantConfigured = false;
           this.addConfigurationMessage();
         }
-        this.isInitializing = false;
-      },
-      error: (error) => {
-        console.error('Error al crear sesión:', error);
-        this.isWatsonConfigured = false;
-        this.addConfigurationMessage();
-        this.isInitializing = false;
-      }
-    });
+      });
   }
 
   private addWelcomeMessage(): void {
@@ -77,7 +100,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private addConfigurationMessage(): void {
     const configMessage: ChatMessage = {
-      text: '⚠️ El asistente virtual no está configurado actualmente. Para habilitarlo, necesitas configurar las credenciales de IBM Watson Assistant en el archivo application.properties del backend. Consulta el archivo WATSON_ASSISTANT_SETUP.md para obtener instrucciones detalladas. El resto del sistema funciona normalmente.',
+      text: '⚠️ El asistente virtual no está configurado correctamente. Por favor verifica las credenciales en el backend.',
       isUser: false,
       timestamp: new Date()
     };
@@ -90,16 +113,16 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
 
     // Si no hay sesión configurada, mostrar mensaje informativo
-    if (!this.sessionId || !this.isWatsonConfigured) {
+    if (!this.sessionId || !this.isAssistantConfigured) {
       const userMessage: ChatMessage = {
         text: this.currentMessage.trim(),
         isUser: true,
         timestamp: new Date()
       };
       this.messages.push(userMessage);
-      
+
       const infoMessage: ChatMessage = {
-        text: 'El asistente virtual no está disponible. Por favor, configura IBM Watson Assistant siguiendo las instrucciones en WATSON_ASSISTANT_SETUP.md',
+        text: 'El asistente virtual no está disponible.',
         isUser: false,
         timestamp: new Date()
       };
@@ -118,41 +141,48 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     const messageToSend = this.currentMessage.trim();
     this.currentMessage = '';
     this.isLoading = true;
+    console.log('Enviando mensaje:', messageToSend, 'sessionId:', this.sessionId);
 
-    this.chatService.sendMessage(messageToSend, this.sessionId).subscribe({
-      next: (response) => {
-        if (response.success) {
-          const botMessage: ChatMessage = {
-            text: response.response,
-            isUser: false,
-            timestamp: new Date()
-          };
-          this.messages.push(botMessage);
-        } else {
-          // Si el error indica que no está configurado, actualizar el estado
-          if (response.errorMessage && response.errorMessage.includes('no está configurado')) {
-            this.isWatsonConfigured = false;
+    this.chatService.sendMessage(messageToSend, this.sessionId)
+      .pipe(finalize(() => {
+        this.ngZone.run(() => {
+          this.isLoading = false;
+          console.log('sendMessage finalize: isLoading set to', this.isLoading);
+          this.cdr.detectChanges();
+        });
+      }))
+      .subscribe({
+        next: (response) => {
+          console.log('sendMessage response:', response);
+          if (response.success) {
+            const botMessage: ChatMessage = {
+              text: response.response,
+              isUser: false,
+              timestamp: new Date()
+            };
+            this.messages.push(botMessage);
+          } else {
+            // Si el error indica que no está configurado, actualizar el estado
+            this.isAssistantConfigured = false;
+
+            const errorMessage: ChatMessage = {
+              text: response.errorMessage || 'Error al procesar el mensaje',
+              isUser: false,
+              timestamp: new Date()
+            };
+            this.messages.push(errorMessage);
           }
+        },
+        error: (error: any) => {
+          console.error('Error al enviar mensaje:', error);
           const errorMessage: ChatMessage = {
-            text: response.errorMessage || 'Error al procesar el mensaje',
+            text: 'Error al comunicarse con el asistente.',
             isUser: false,
             timestamp: new Date()
           };
           this.messages.push(errorMessage);
         }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error al enviar mensaje:', error);
-        const errorMessage: ChatMessage = {
-          text: 'Error al comunicarse con el asistente. Verifica que Watson Assistant esté configurado correctamente.',
-          isUser: false,
-          timestamp: new Date()
-        };
-        this.messages.push(errorMessage);
-        this.isLoading = false;
-      }
-    });
+      });
   }
 
   onKeyPress(event: KeyboardEvent): void {
@@ -165,7 +195,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   private scrollToBottom(): void {
     try {
       if (this.messagesContainer) {
-        this.messagesContainer.nativeElement.scrollTop = 
+        this.messagesContainer.nativeElement.scrollTop =
           this.messagesContainer.nativeElement.scrollHeight;
       }
     } catch (err) {
@@ -175,7 +205,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   clearChat(): void {
     this.messages = [];
-    if (this.isWatsonConfigured && this.sessionId) {
+    if (this.isAssistantConfigured && this.sessionId) {
       this.addWelcomeMessage();
     } else {
       this.addConfigurationMessage();

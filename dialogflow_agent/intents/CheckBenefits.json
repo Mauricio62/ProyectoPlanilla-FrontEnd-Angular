@@ -1,0 +1,34 @@
+﻿{
+    "name":  "CheckBenefits",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Â¿QuÃ© beneficios tengo?"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Consultando beneficios..."
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

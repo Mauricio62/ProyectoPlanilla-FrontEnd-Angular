@@ -1,0 +1,45 @@
+﻿{
+    "name":  "CalculateBonus",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Calcular bono"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+                                             {
+                                                 "name":  "tipoBeneficio",
+                                                 "dataType":  "@sys.any",
+                                                 "value":  "$.tipoBeneficio",
+                                                 "isList":  false
+                                             },
+                                             {
+                                                 "name":  "periodo",
+                                                 "dataType":  "@sys.date",
+                                                 "value":  "$.periodo",
+                                                 "isList":  false
+                                             }
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Calculando bono..."
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

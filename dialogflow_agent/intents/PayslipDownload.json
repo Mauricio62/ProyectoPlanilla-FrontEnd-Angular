@@ -1,0 +1,39 @@
+﻿{
+    "name":  "PayslipDownload",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Descargar boleta"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+                                             {
+                                                 "name":  "periodo",
+                                                 "dataType":  "@sys.date",
+                                                 "value":  "$.periodo",
+                                                 "isList":  false
+                                             }
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Preparando tu boleta..."
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

@@ -1,0 +1,45 @@
+﻿{
+    "name":  "ReportAbsence",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Reportar ausencia"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+                                             {
+                                                 "name":  "fecha",
+                                                 "dataType":  "@sys.date",
+                                                 "value":  "$.fecha",
+                                                 "isList":  false
+                                             },
+                                             {
+                                                 "name":  "motivo",
+                                                 "dataType":  "@sys.any",
+                                                 "value":  "$.motivo",
+                                                 "isList":  false
+                                             }
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Registrando ausencia..."
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

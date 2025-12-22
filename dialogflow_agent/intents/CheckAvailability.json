@@ -1,0 +1,33 @@
+﻿{
+    "name":  "CheckAvailability",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Â¿EstÃ¡s disponible?"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "SÃ­, estoy disponible. Â¿QuÃ© consulta quieres hacer?"
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

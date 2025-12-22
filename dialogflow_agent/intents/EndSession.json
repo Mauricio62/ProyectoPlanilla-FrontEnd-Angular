@@ -1,0 +1,34 @@
+﻿{
+    "name":  "EndSession",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Cerrar sesiÃ³n"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "SesiÃ³n finalizada. Â¡Hasta pronto!"
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

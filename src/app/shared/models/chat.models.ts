@@ -13,7 +13,7 @@ export interface ChatMessageResponse {
 
 export interface ChatSessionResponse {
   success: boolean;
-  sessionId?: string;
+  sessionId: string;
   message?: string;
 }
 

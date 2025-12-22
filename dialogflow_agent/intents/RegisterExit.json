@@ -1,0 +1,45 @@
+﻿{
+    "name":  "RegisterExit",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Registrar salida"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+                                             {
+                                                 "name":  "fecha",
+                                                 "dataType":  "@sys.date",
+                                                 "value":  "$.fecha",
+                                                 "isList":  false
+                                             },
+                                             {
+                                                 "name":  "hora",
+                                                 "dataType":  "@sys.time",
+                                                 "value":  "$.hora",
+                                                 "isList":  false
+                                             }
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Registrando salida... Â¿Confirmas?"
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

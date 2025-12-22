@@ -1,0 +1,42 @@
+﻿{
+    "name":  "Goodbye",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "AdiÃ³s"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     },
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Gracias, hasta luego"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Hasta luego. Si necesitas algo mÃ¡s, aquÃ­ estoy."
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

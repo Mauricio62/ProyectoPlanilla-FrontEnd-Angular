@@ -1,0 +1,235 @@
+[
+  {
+    "name": "Greeting",
+    "auto": true,
+    "fallbackIntent": false,
+    "events": [],
+    "priority": 500000,
+    "webhookState": "WEBHOOK_STATE_DISABLED",
+    "userSays": [
+      { "data": [{ "text": "Hola" }], "isTemplate": false, "count": 0 },
+      { "data": [{ "text": "Hola asistente" }], "isTemplate": false, "count": 0 },
+      { "data": [{ "text": "Buenos días" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      {
+        "resetContexts": false,
+        "parameters": [],
+        "messages": [
+          { "type": 0, "lang": "es", "speech": ["¡Hola! Soy el asistente de planillas. ¿En qué puedo ayudarte?"] }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Goodbye",
+    "auto": true,
+    "fallbackIntent": false,
+    "userSays": [
+      { "data": [{ "text": "Adiós" }], "isTemplate": false, "count": 0 },
+      { "data": [{ "text": "Gracias, hasta luego" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [], "messages": [{ "type": 0, "lang": "es", "speech": ["Hasta luego. Si necesitas algo más, aquí estoy."] }] }
+    ]
+  },
+  {
+    "name": "Help",
+    "auto": true,
+    "fallbackIntent": false,
+    "userSays": [
+      { "data": [{ "text": "Ayuda" }], "isTemplate": false, "count": 0 },
+      { "data": [{ "text": "¿Qué puedes hacer?" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [], "messages": [{ "type": 0, "lang": "es", "speech": ["Puedo consultar salarios, registrar asistencias, calcular bonos y más. ¿Qué necesitas?"] }] }
+    ]
+  },
+  {
+    "name": "CheckAvailability",
+    "auto": true,
+    "fallbackIntent": false,
+    "userSays": [
+      { "data": [{ "text": "¿Estás disponible?" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [], "messages": [{ "type": 0, "lang": "es", "speech": ["Sí, estoy disponible. ¿Qué consulta quieres hacer?"] }] }
+    ]
+  },
+  {
+    "name": "CreateSession",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [
+      { "data": [{ "text": "Iniciar sesión de chat" }], "isTemplate": false, "count": 0 },
+      { "data": [{ "text": "Crear sesión" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [], "messages": [{ "type": 0, "lang": "es", "speech": ["Iniciando sesión..."] }] }
+    ]
+  },
+  {
+    "name": "EndSession",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [
+      { "data": [{ "text": "Cerrar sesión" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [], "messages": [{ "type": 0, "lang": "es", "speech": ["Sesión finalizada. ¡Hasta pronto!"] }] }
+    ]
+  },
+  {
+    "name": "CheckSalary",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [
+      { "data": [{ "text": "¿Cuál es mi salario?" }], "isTemplate": false, "count": 0 },
+      { "data": [{ "text": "Mostrar mi sueldo" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      {
+        "resetContexts": false,
+        "parameters": [
+          { "name": "periodo", "dataType": "@sys.date", "value": "$.periodo", "isList": false }
+        ],
+        "messages": [{ "type": 0, "lang": "es", "speech": ["Buscando tu salario..."] }]
+      }
+    ]
+  },
+  {
+    "name": "SalaryByMonth",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [
+      { "data": [{ "text": "Salario de abril" }], "isTemplate": false, "count": 0 },
+      { "data": [{ "text": "Mi sueldo en {mes}", "userDefined": true }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      {
+        "resetContexts": false,
+        "parameters": [
+          { "name": "mes", "dataType": "@sys.date", "value": "$.mes", "isList": false },
+          { "name": "trabajadorId", "dataType": "@trabajador", "value": "$.trabajadorId", "isList": false }
+        ],
+        "messages": [{ "type": 0, "lang": "es", "speech": ["Consultando salario de {mes}..."] }]
+      }
+    ]
+  },
+  {
+    "name": "PayslipDownload",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [
+      { "data": [{ "text": "Descargar boleta" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [{ "name": "periodo", "dataType": "@sys.date", "value": "$.periodo", "isList": false }], "messages": [{ "type": 0, "lang": "es", "speech": ["Preparando tu boleta..."] }] }
+    ]
+  },
+  {
+    "name": "RegisterEntry",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [
+      { "data": [{ "text": "Registrar entrada" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [{ "name": "fecha", "dataType": "@sys.date", "value": "$.fecha", "isList": false }, { "name": "hora", "dataType": "@sys.time", "value": "$.hora", "isList": false }], "messages": [{ "type": 0, "lang": "es", "speech": ["Registrando entrada... ¿Confirmas?"] }] }
+    ]
+  },
+  {
+    "name": "RegisterExit",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [
+      { "data": [{ "text": "Registrar salida" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [{ "name": "fecha", "dataType": "@sys.date", "value": "$.fecha", "isList": false }, { "name": "hora", "dataType": "@sys.time", "value": "$.hora", "isList": false }], "messages": [{ "type": 0, "lang": "es", "speech": ["Registrando salida... ¿Confirmas?"] }] }
+    ]
+  },
+  {
+    "name": "ReportAbsence",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [
+      { "data": [{ "text": "Reportar ausencia" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [{ "name": "fecha", "dataType": "@sys.date", "value": "$.fecha", "isList": false }, { "name": "motivo", "dataType": "@sys.any", "value": "$.motivo", "isList": false }], "messages": [{ "type": 0, "lang": "es", "speech": ["Registrando ausencia..."] }] }
+    ]
+  },
+  {
+    "name": "RequestLeave",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [
+      { "data": [{ "text": "Solicitar permiso" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [{ "name": "fechaInicio", "dataType": "@sys.date", "value": "$.fechaInicio", "isList": false }, { "name": "fechaFin", "dataType": "@sys.date", "value": "$.fechaFin", "isList": false }, { "name": "tipo", "dataType": "@sys.any", "value": "$.tipo", "isList": false }], "messages": [{ "type": 0, "lang": "es", "speech": ["Enviando solicitud de permiso..."] }] }
+    ]
+  },
+  {
+    "name": "CalculateBonus",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [
+      { "data": [{ "text": "Calcular bono" }], "isTemplate": false, "count": 0 }
+    ],
+    "responses": [
+      { "resetContexts": false, "parameters": [{ "name": "tipoBeneficio", "dataType": "@sys.any", "value": "$.tipoBeneficio", "isList": false }, { "name": "periodo", "dataType": "@sys.date", "value": "$.periodo", "isList": false }], "messages": [{ "type": 0, "lang": "es", "speech": ["Calculando bono..."] }] }
+    ]
+  },
+  {
+    "name": "CheckBenefits",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [ { "data": [{ "text": "¿Qué beneficios tengo?" }], "isTemplate": false, "count": 0 } ],
+    "responses": [ { "resetContexts": false, "parameters": [], "messages": [{ "type": 0, "lang": "es", "speech": ["Consultando beneficios..."] }] } ]
+  },
+  {
+    "name": "OvertimeRequest",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [ { "data": [{ "text": "Solicitar hora extra" }], "isTemplate": false, "count": 0 } ],
+    "responses": [ { "resetContexts": false, "parameters": [{ "name": "horas", "dataType": "@sys.number", "value": "$.horas", "isList": false }, { "name": "fecha", "dataType": "@sys.date", "value": "$.fecha", "isList": false }], "messages": [{ "type": 0, "lang": "es", "speech": ["Enviando solicitud de horas extra..."] }] } ]
+  },
+  {
+    "name": "OvertimeHours",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [ { "data": [{ "text": "¿Cuántas horas extra tengo?" }], "isTemplate": false, "count": 0 } ],
+    "responses": [ { "resetContexts": false, "parameters": [], "messages": [{ "type": 0, "lang": "es", "speech": ["Consultando horas extra..."] }] } ]
+  },
+  {
+    "name": "UpdatePersonalInfo",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [ { "data": [{ "text": "Actualizar datos personales" }], "isTemplate": false, "count": 0 } ],
+    "responses": [ { "resetContexts": false, "parameters": [{ "name": "campo", "dataType": "@sys.any", "value": "$.campo", "isList": false }, { "name": "valor", "dataType": "@sys.any", "value": "$.valor", "isList": false }], "messages": [{ "type": 0, "lang": "es", "speech": ["Actualizando datos... ¿Confirmas?"] }] } ]
+  },
+  {
+    "name": "ChangeBankAccount",
+    "auto": true,
+    "fallbackIntent": false,
+    "webhookState": "WEBHOOK_STATE_ENABLED",
+    "userSays": [ { "data": [{ "text": "Cambiar cuenta bancaria" }], "isTemplate": false, "count": 0 } ],
+    "responses": [ { "resetContexts": false, "parameters": [{ "name": "banco", "dataType": "@sys.any", "value": "$.banco", "isList": false }, { "name": "numeroCuenta", "dataType": "@sys.any", "value": "$.numeroCuenta", "isList": false }], "messages": [{ "type": 0, "lang": "es", "speech": ["Actualizando cuenta bancaria..."] }] } ]
+  }
+]

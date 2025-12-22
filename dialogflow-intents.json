@@ -1,0 +1,293 @@
+[
+  {
+    "name": "Greeting",
+    "trainingPhrases": ["Hola", "Hola asistente", "Buenos días", "¿Hay alguien ahí?", "¡Hola!"],
+    "parameters": [],
+    "responses": ["¡Hola! Soy el asistente de planillas. ¿En qué puedo ayudarte?"],
+    "fulfillment": false
+  },
+  {
+    "name": "Goodbye",
+    "trainingPhrases": ["Adiós", "Gracias, hasta luego", "Nos vemos", "Chao"],
+    "parameters": [],
+    "responses": ["Hasta luego. Si necesitas algo más, aquí estoy."],
+    "fulfillment": false
+  },
+  {
+    "name": "Help",
+    "trainingPhrases": ["Ayuda", "¿Qué puedes hacer?", "¿Cómo me ayudas?", "Necesito ayuda con la planilla"],
+    "parameters": [],
+    "responses": ["Puedo consultar salarios, registrar asistencias, calcular bonos y más. ¿Qué necesitas?"],
+    "fulfillment": false
+  },
+  {
+    "name": "CheckAvailability",
+    "trainingPhrases": ["¿Estás disponible?", "¿Puedes ayudarme ahora?", "¿El asistente está activo?"],
+    "parameters": [],
+    "responses": ["Sí, estoy disponible. ¿Qué consulta quieres hacer?"],
+    "fulfillment": false
+  },
+  {
+    "name": "CreateSession",
+    "trainingPhrases": ["Iniciar sesión de chat", "Crear sesión", "Abrir sesión", "Empezar conversación"],
+    "parameters": [],
+    "responses": ["Iniciando sesión..."],
+    "fulfillment": true
+  },
+  {
+    "name": "EndSession",
+    "trainingPhrases": ["Cerrar sesión", "Terminar chat", "Finalizar conversación"],
+    "parameters": [],
+    "responses": ["Sesión finalizada. ¡Hasta pronto!"],
+    "fulfillment": true
+  },
+  {
+    "name": "CheckSalary",
+    "trainingPhrases": ["¿Cuál es mi salario?", "Mostrar mi sueldo", "¿Cuánto gano?"],
+    "parameters": [
+      { "name": "periodo", "entity": "@sys.date", "required": false, "prompts": ["¿Para qué periodo?"] }
+    ],
+    "responses": ["Buscando tu salario..."],
+    "fulfillment": true
+  },
+  {
+    "name": "SalaryByMonth",
+    "trainingPhrases": ["Salario de {mes}", "Mi sueldo en {mes}", "Pago de {periodo}"],
+    "parameters": [
+      { "name": "mes", "entity": "@sys.date", "required": true, "prompts": ["¿Qué mes quieres consultar?"] },
+      { "name": "trabajadorId", "entity": "@trabajador", "required": false, "prompts": ["¿De qué trabajador hablas?"] }
+    ],
+    "responses": ["Consultando salario de {mes}..."],
+    "fulfillment": true
+  },
+  {
+    "name": "PayslipDownload",
+    "trainingPhrases": ["Descargar boleta", "Obtener mi boleta de pago", "Enviar mi boleta de {mes}"],
+    "parameters": [
+      { "name": "periodo", "entity": "@sys.date", "required": true, "prompts": ["¿Para qué periodo?"] }
+    ],
+    "responses": ["Preparando tu boleta..."],
+    "fulfillment": true
+  },
+  {
+    "name": "RegisterEntry",
+    "trainingPhrases": ["Registrar entrada", "Marcar entrada ahora", "He entrado al trabajo"],
+    "parameters": [
+      { "name": "fecha", "entity": "@sys.date", "required": false, "prompts": ["¿Qué fecha? (por defecto hoy)"] },
+      { "name": "hora", "entity": "@sys.time", "required": false, "prompts": ["¿A qué hora? (por defecto ahora)"] }
+    ],
+    "responses": ["Registrando entrada... ¿Confirmas?"],
+    "fulfillment": true
+  },
+  {
+    "name": "RegisterExit",
+    "trainingPhrases": ["Registrar salida", "Marcar salida", "He salido del trabajo"],
+    "parameters": [
+      { "name": "fecha", "entity": "@sys.date", "required": false, "prompts": ["¿Qué fecha? (por defecto hoy)"] },
+      { "name": "hora", "entity": "@sys.time", "required": false, "prompts": ["¿A qué hora? (por defecto ahora)"] }
+    ],
+    "responses": ["Registrando salida... ¿Confirmas?"],
+    "fulfillment": true
+  },
+  {
+    "name": "ReportAbsence",
+    "trainingPhrases": ["Reportar ausencia", "No podré ir a trabajar {fecha}", "Ausencia por {motivo} en {fecha}"],
+    "parameters": [
+      { "name": "fecha", "entity": "@sys.date", "required": true, "prompts": ["¿Qué fecha será la ausencia?"] },
+      { "name": "motivo", "entity": "@sys.any", "required": false, "prompts": ["¿Motivo de la ausencia?"] }
+    ],
+    "responses": ["Registrando ausencia..."],
+    "fulfillment": true
+  },
+  {
+    "name": "RequestLeave",
+    "trainingPhrases": ["Solicitar permiso", "Pedir licencia del {fecha}", "Quiero vacaciones del {fechaInicio} al {fechaFin}"],
+    "parameters": [
+      { "name": "fechaInicio", "entity": "@sys.date", "required": true, "prompts": ["¿Fecha de inicio?"] },
+      { "name": "fechaFin", "entity": "@sys.date", "required": true, "prompts": ["¿Fecha de fin?"] },
+      { "name": "tipo", "entity": "@sys.any", "required": false, "prompts": ["¿Tipo de licencia?"] }
+    ],
+    "responses": ["Enviando solicitud de permiso..."],
+    "fulfillment": true
+  },
+  {
+    "name": "CalculateBonus",
+    "trainingPhrases": ["Calcular bono", "¿Qué bono me corresponde este mes?", "Cuánto de bono por puntualidad tengo"],
+    "parameters": [
+      { "name": "tipoBeneficio", "entity": "@sys.any", "required": false, "prompts": ["¿Qué tipo de beneficio?"] },
+      { "name": "periodo", "entity": "@sys.date", "required": false, "prompts": ["¿Para qué periodo?"] }
+    ],
+    "responses": ["Calculando bono..."],
+    "fulfillment": true
+  },
+  {
+    "name": "CheckBenefits",
+    "trainingPhrases": ["¿Qué beneficios tengo?", "Lista de beneficios", "Beneficios para empleados"],
+    "parameters": [],
+    "responses": ["Consultando beneficios..."],
+    "fulfillment": true
+  },
+  {
+    "name": "OvertimeRequest",
+    "trainingPhrases": ["Solicitar hora extra", "Pedir pago por horas extra", "Registrar horas extra hoy"],
+    "parameters": [
+      { "name": "horas", "entity": "@sys.number", "required": true, "prompts": ["¿Cuántas horas?"] },
+      { "name": "fecha", "entity": "@sys.date", "required": false, "prompts": ["¿Para qué fecha?"] }
+    ],
+    "responses": ["Enviando solicitud de horas extra..."],
+    "fulfillment": true
+  },
+  {
+    "name": "OvertimeHours",
+    "trainingPhrases": ["¿Cuántas horas extra tengo?", "Horas extra acumuladas", "Saldo de horas extra"],
+    "parameters": [],
+    "responses": ["Consultando horas extra..."],
+    "fulfillment": true
+  },
+  {
+    "name": "UpdatePersonalInfo",
+    "trainingPhrases": ["Actualizar datos personales", "Cambiar mi teléfono", "Modificar mi dirección"],
+    "parameters": [
+      { "name": "campo", "entity": "@sys.any", "required": true, "prompts": ["¿Qué dato quieres actualizar?"] },
+      { "name": "valor", "entity": "@sys.any", "required": true, "prompts": ["¿Cuál es el nuevo valor?"] }
+    ],
+    "responses": ["Actualizando datos... ¿Confirmas?"],
+    "fulfillment": true
+  },
+  {
+    "name": "ChangeBankAccount",
+    "trainingPhrases": ["Cambiar cuenta bancaria", "Actualizar cuenta para pagos", "Modificar mi cuenta para boletas"],
+    "parameters": [
+      { "name": "banco", "entity": "@sys.any", "required": true, "prompts": ["¿Cuál es el banco?"] },
+      { "name": "numeroCuenta", "entity": "@sys.any", "required": true, "prompts": ["¿Número de cuenta?"] }
+    ],
+    "responses": ["Actualizando cuenta bancaria..."],
+    "fulfillment": true
+  },
+  {
+    "name": "TaxInfo",
+    "trainingPhrases": ["Información tributaria", "¿Cuál es mi RUC?", "Dame mi resumen de impuestos"],
+    "parameters": [],
+    "responses": ["Consultando información tributaria..."],
+    "fulfillment": true
+  },
+  {
+    "name": "RequestVacationBalance",
+    "trainingPhrases": ["Saldo de vacaciones", "¿Cuántos días de vacaciones me quedan?", "Días de vacaciones disponibles"],
+    "parameters": [],
+    "responses": ["Consultando saldo de vacaciones..."],
+    "fulfillment": true
+  },
+  {
+    "name": "ApplyForAdvance",
+    "trainingPhrases": ["Solicitar adelanto de salario", "Pedir anticipo", "Necesito un adelanto de {monto}"],
+    "parameters": [
+      { "name": "monto", "entity": "@sys.number", "required": true, "prompts": ["¿Cuánto deseas solicitar?"] },
+      { "name": "motivo", "entity": "@sys.any", "required": false, "prompts": ["¿Motivo?"] }
+    ],
+    "responses": ["Enviando solicitud de adelanto..."],
+    "fulfillment": true
+  },
+  {
+    "name": "ApproveAdvance",
+    "trainingPhrases": ["Aprobar adelanto {id}", "Autorizar anticipo {id}", "Aceptar solicitud de adelanto {id}"],
+    "parameters": [
+      { "name": "id", "entity": "@sys.number", "required": true, "prompts": ["¿ID de la solicitud?"] }
+    ],
+    "responses": ["Aprobando solicitud..."],
+    "fulfillment": true
+  },
+  {
+    "name": "CheckAttendanceHistory",
+    "trainingPhrases": ["Historial de asistencias", "Ver mis asistencias", "Asistencias de {periodo}"],
+    "parameters": [
+      { "name": "periodo", "entity": "@sys.date", "required": false, "prompts": ["¿Para qué periodo?"] }
+    ],
+    "responses": ["Consultando historial de asistencias..."],
+    "fulfillment": true
+  },
+  {
+    "name": "RequestAttendanceCorrection",
+    "trainingPhrases": ["Corregir asistencia", "Solicitar corrección de entrada el {fecha}", "Mi marcación está mal el {fecha}"],
+    "parameters": [
+      { "name": "fecha", "entity": "@sys.date", "required": true, "prompts": ["¿Qué fecha necesitas corregir?"] },
+      { "name": "detalle", "entity": "@sys.any", "required": false, "prompts": ["Describe la corrección"] }
+    ],
+    "responses": ["Enviando solicitud de corrección..."],
+    "fulfillment": true
+  },
+  {
+    "name": "GetWorkSchedule",
+    "trainingPhrases": ["Mi horario", "Horario de trabajo", "¿Cuál es mi turno hoy?"],
+    "parameters": [
+      { "name": "fecha", "entity": "@sys.date", "required": false, "prompts": ["¿Para qué fecha?"] }
+    ],
+    "responses": ["Buscando tu horario..."],
+    "fulfillment": true
+  },
+  {
+    "name": "ShiftSwapRequest",
+    "trainingPhrases": ["Solicitar cambio de turno", "Intercambiar turno con {compañero}", "Puedo cambiar mi turno el {fecha}?"],
+    "parameters": [
+      { "name": "compañero", "entity": "@trabajador", "required": true, "prompts": ["¿Con quién quieres cambiar?"] },
+      { "name": "fecha", "entity": "@sys.date", "required": true, "prompts": ["¿Qué fecha?"] }
+    ],
+    "responses": ["Enviando solicitud de cambio de turno..."],
+    "fulfillment": true
+  },
+  {
+    "name": "ReportIssue",
+    "trainingPhrases": ["Reportar un problema", "La app no funciona", "Error al descargar boleta"],
+    "parameters": [
+      { "name": "detalle", "entity": "@sys.any", "required": true, "prompts": ["Descríbeme el problema"] }
+    ],
+    "responses": ["Gracias, he registrado el incidente y lo comunicaré a soporte."],
+    "fulfillment": true
+  },
+  {
+    "name": "ContactHR",
+    "trainingPhrases": ["Contactar RRHH", "Hablar con recursos humanos", "Necesito hablar con RRHH sobre mi contrato"],
+    "parameters": [
+      { "name": "motivo", "entity": "@sys.any", "required": false, "prompts": ["¿Cuál es el motivo del contacto?"] }
+    ],
+    "responses": ["Solicitando contacto con RRHH... Te aviso cuando confirmen."],
+    "fulfillment": true
+  },
+  {
+    "name": "AskCompanyHolidays",
+    "trainingPhrases": ["Días feriados", "Feriados este año", "¿Cuándo son los próximos feriados?"],
+    "parameters": [
+      { "name": "year", "entity": "@sys.number", "required": false, "prompts": ["¿Para qué año?"] }
+    ],
+    "responses": ["Consultando calendario de feriados..."],
+    "fulfillment": true
+  },
+  {
+    "name": "SmallTalkThanks",
+    "trainingPhrases": ["Gracias", "Muchas gracias", "Te lo agradezco"],
+    "parameters": [],
+    "responses": ["Con gusto, para eso estoy."],
+    "fulfillment": false
+  },
+  {
+    "name": "UnknownFallback",
+    "trainingPhrases": [],
+    "parameters": [],
+    "responses": ["Lo siento, no entendí eso. ¿Puedes reformular tu pregunta?"],
+    "fulfillment": false
+  },
+  {
+    "name": "ConfirmAction",
+    "trainingPhrases": ["Sí", "Confirmar", "Correcto", "Aceptar"],
+    "parameters": [],
+    "responses": ["Confirmado."],
+    "fulfillment": true
+  },
+  {
+    "name": "DenyAction",
+    "trainingPhrases": ["No", "Cancelar", "No confirmar"],
+    "parameters": [],
+    "responses": ["Acción cancelada."],
+    "fulfillment": false
+  }
+]

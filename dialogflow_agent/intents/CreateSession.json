@@ -1,0 +1,43 @@
+﻿{
+    "name":  "CreateSession",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Iniciar sesiÃ³n de chat"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     },
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Crear sesiÃ³n"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Iniciando sesiÃ³n..."
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

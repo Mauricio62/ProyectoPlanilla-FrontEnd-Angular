@@ -1,0 +1,55 @@
+﻿{
+    "name":  "SalaryByMonth",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Salario de abril"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     },
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Mi sueldo en {mes}",
+                                          "userDefined":  true
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+                                             {
+                                                 "name":  "mes",
+                                                 "dataType":  "@sys.date",
+                                                 "value":  "$.mes",
+                                                 "isList":  false
+                                             },
+                                             {
+                                                 "name":  "trabajadorId",
+                                                 "dataType":  "@trabajador",
+                                                 "value":  "$.trabajadorId",
+                                                 "isList":  false
+                                             }
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Consultando salario de {mes}..."
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

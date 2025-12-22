@@ -1,0 +1,45 @@
+﻿{
+    "name":  "UpdatePersonalInfo",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Actualizar datos personales"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+                                             {
+                                                 "name":  "campo",
+                                                 "dataType":  "@sys.any",
+                                                 "value":  "$.campo",
+                                                 "isList":  false
+                                             },
+                                             {
+                                                 "name":  "valor",
+                                                 "dataType":  "@sys.any",
+                                                 "value":  "$.valor",
+                                                 "isList":  false
+                                             }
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Actualizando datos... Â¿Confirmas?"
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

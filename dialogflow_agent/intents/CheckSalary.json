@@ -1,0 +1,48 @@
+﻿{
+    "name":  "CheckSalary",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Â¿CuÃ¡l es mi salario?"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     },
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Mostrar mi sueldo"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+                                             {
+                                                 "name":  "periodo",
+                                                 "dataType":  "@sys.date",
+                                                 "value":  "$.periodo",
+                                                 "isList":  false
+                                             }
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Buscando tu salario..."
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

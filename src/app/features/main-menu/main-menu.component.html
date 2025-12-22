@@ -60,7 +60,10 @@
   <div class="chat-panel" [class.open]="isChatOpen">
     <div class="chat-panel-header">
       <h3>🤖 Asistente Virtual</h3>
-      <button class="chat-close-btn" (click)="closeChat()" title="Cerrar">✕</button>
+      <div class="chat-header-actions">
+        <button class="chat-clear-btn" (click)="clearChat()" title="Limpiar chat">🗑️</button>
+        <button class="chat-close-btn" (click)="closeChat()" title="Cerrar">✕</button>
+      </div>
     </div>
     <div class="chat-panel-content">
       <app-chat></app-chat>

@@ -1,0 +1,51 @@
+﻿{
+    "name":  "RequestLeave",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "webhookState":  "WEBHOOK_STATE_ENABLED",
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Solicitar permiso"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+                                             {
+                                                 "name":  "fechaInicio",
+                                                 "dataType":  "@sys.date",
+                                                 "value":  "$.fechaInicio",
+                                                 "isList":  false
+                                             },
+                                             {
+                                                 "name":  "fechaFin",
+                                                 "dataType":  "@sys.date",
+                                                 "value":  "$.fechaFin",
+                                                 "isList":  false
+                                             },
+                                             {
+                                                 "name":  "tipo",
+                                                 "dataType":  "@sys.any",
+                                                 "value":  "$.tipo",
+                                                 "isList":  false
+                                             }
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Enviando solicitud de permiso..."
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}

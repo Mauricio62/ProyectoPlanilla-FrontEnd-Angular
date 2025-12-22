@@ -1,0 +1,42 @@
+﻿{
+    "name":  "Help",
+    "auto":  true,
+    "fallbackIntent":  false,
+    "userSays":  [
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Ayuda"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     },
+                     {
+                         "data":  [
+                                      {
+                                          "text":  "Â¿QuÃ© puedes hacer?"
+                                      }
+                                  ],
+                         "isTemplate":  false,
+                         "count":  0
+                     }
+                 ],
+    "responses":  [
+                      {
+                          "resetContexts":  false,
+                          "parameters":  [
+
+                                         ],
+                          "messages":  [
+                                           {
+                                               "type":  0,
+                                               "lang":  "es",
+                                               "speech":  [
+                                                              "Puedo consultar salarios, registrar asistencias, calcular bonos y mÃ¡s. Â¿QuÃ© necesitas?"
+                                                          ]
+                                           }
+                                       ]
+                      }
+                  ]
+}
